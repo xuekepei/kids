@@ -12,7 +12,7 @@
         
         <div class="word-detail-image-body">
             <div class="word-detail-image-box" v-for="item in word.values" :key="item">
-                <img class="word-detail-image" :class="item.status == 1 ? 'word-detail-failed':'' || item.status == 2 ? 'word-detail-success':''" :src="'/image/'+item.name+'.jpg'" @click="clickWord(item)"/>
+                <img class="word-detail-image" :class="{failed:item.status == 1 ,success:item.status == 2}" :src="'/image/'+item.name+'.jpg'" @click="clickWord(item)"/>
             </div>
         </div>
 
@@ -192,6 +192,13 @@ a {
     height: 100%;
 	border: solid 3px white;
 }
+.word-detail-image.failed {
+	border: solid 3px red;
+}
+
+.word-detail-image.success {
+	border: solid 3px green;
+}
 
 .word-detail-control-body {
     margin-top: 30px;
@@ -204,11 +211,11 @@ a {
     width: 70px;
     height: 40px;
 }
-.word-detail-failed {
+/* .word-detail-failed {
 	border: solid 3px red;
 }
 
 .word-detail-success {
 	border: solid 3px green;
-}
+} */
 </style>
