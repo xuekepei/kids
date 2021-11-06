@@ -4,29 +4,28 @@
 		<NButton icon="pi pi-check">图片选择 </NButton>
 	</NUpload>
 
-    <NModal v-model:show="cropperDialogOpen" class="weshow-cropper-dialog">
-		<template #header>
-			<div>标题</div>
-		</template>
-      <vue-cropper ref="cropper" class="weshow-cropper" :aspect-ratio="aspectRatio" :src="imgSrc" preview=".preview"/>
-      <template #footer>
-        <NButton icon="pi pi-times" class="p-button-text" @click="cropperDialogOpen = false">
-			取消
-		</NButton>
-        <NButton icon="pi pi-check" @click="toCrop">
-			确认
-		</NButton>
-      </template>
+    <NModal title="图片裁切" preset="card" :style="bodyStyle" v-model:show="cropperDialogOpen" class="weshow-cropper-dialog">
+        <vue-cropper ref="cropper" class="weshow-cropper" :aspect-ratio="aspectRatio" :src="imgSrc" preview=".preview"/>
+        <template #footer>
+            <NSpace justify="space-between">
+                <NButton icon="pi pi-times" class="p-button-text" @click="cropperDialogOpen = false">
+                    取消
+                </NButton>
+                <NButton icon="pi pi-check" @click="toCrop">
+                    确认
+                </NButton>
+            </NSpace>
+        </template>
     </NModal>
   </div>
 </template>
 <script>
 import VueCropper from "vue-cropperjs";
-import {NUpload, NModal, NButton} from "naive-ui";
+import {NUpload, NModal, NButton, NSpace} from "naive-ui";
 import { ref } from "@vue/reactivity";
 
 export default {
-  components: { VueCropper, NModal, NUpload, NButton },
+  components: { VueCropper, NModal, NUpload, NButton, NSpace},
   props: {
     aspectRatio: {
       type: Number,
@@ -69,7 +68,10 @@ export default {
       );
       cropperDialogOpen.value = false;
     };
-    return { cropper, cropperDialogOpen, imgSrc, uploadImage, toCrop, uploder };
+    return { cropper, cropperDialogOpen, imgSrc, uploadImage, toCrop, uploder ,
+	bodyStyle: {
+        maxWidth: '600px'
+      },};
   },
 };
 </script>

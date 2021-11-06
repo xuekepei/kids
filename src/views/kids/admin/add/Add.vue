@@ -26,7 +26,7 @@
                         </n-grid-item>  
                     </n-grid>
 
-                    <Cropper :aspectRatio="16 / 9" @crop="getCover" />
+                    <Cropper :aspectRatio="16 / 16" @crop="getCover" />
 
                     <n-space class="add-content-body-search-button" justify="space-between">
                         <n-button @click="current = 1">上一步</n-button>
