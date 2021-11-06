@@ -211,11 +211,4 @@ a {
     width: 70px;
     height: 40px;
 }
-/* .word-detail-failed {
-	border: solid 3px red;
-}
-
-.word-detail-success {
-	border: solid 3px green;
-} */
 </style>
