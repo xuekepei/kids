@@ -26,6 +26,8 @@
                         </n-grid-item>  
                     </n-grid>
 
+                    <Cropper :aspectRatio="16 / 9" @crop="getCover" />
+
                     <n-space class="add-content-body-search-button" justify="space-between">
                         <n-button @click="current = 1">上一步</n-button>
                         <n-button @click="add">添加</n-button>
@@ -41,6 +43,7 @@
 import {ref} from "vue"
 import { NInput, NSpace, NSteps, NStep, NButton, NGrid, NGridItem, NCard} from 'naive-ui';
 import {authApi} from '@/api'
+import Cropper from "@/components/Cropper.vue";
 
 export default {
     components:{
@@ -51,10 +54,11 @@ export default {
         NButton,
         NGridItem,
         NGrid,
-        NCard
+        NCard,
+        Cropper
     },
     setup() {
-        const currentRef = ref(1);
+        const currentRef = ref(2);
         const searchResult = ref([]);
         const wordKey = ref("");
         const selectWord = ref(null)
@@ -74,7 +78,7 @@ export default {
                         currentRef.value = 2
                     }
                 }
-                console.log(res)
+                // console.log(res)
             })
         };
         const add = () =>{
@@ -107,6 +111,10 @@ export default {
 				audioPlay.play()
 			})
 		};
+        const getCover = (base64) => {
+        // form.coverImage = base64;
+            console.log(base64)
+        };
 
         return {
             currentStatus : ref('process'),
@@ -118,7 +126,8 @@ export default {
             wordKey,
             selectWord,
             playAudio,
-            searchLoading
+            searchLoading,
+            getCover
         };
     },
 }
@@ -137,7 +146,7 @@ export default {
     padding:10px 5px;
 }
 .add-content-body {
-    margin: 10px 0px;
+    margin: 10px 10px;
     justify-content: center;
     justify-items: center;
 }

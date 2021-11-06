@@ -11,6 +11,7 @@
     "axios": "^0.24.0",
     "core-js": "^3.6.5",
     "vue": "^3.0.0",
+    "vue-cropperjs": "^5.0.0",
     "vue-router": "^4.0.0-0",
     "vue-sidebar-menu": "^5.1.2",
     "vuex": "^4.0.0-0"
