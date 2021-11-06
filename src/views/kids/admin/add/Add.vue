@@ -58,7 +58,7 @@ export default {
         Cropper
     },
     setup() {
-        const currentRef = ref(2);
+        const currentRef = ref(1);
         const searchResult = ref([]);
         const wordKey = ref("");
         const selectWord = ref(null)
