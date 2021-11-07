@@ -4,6 +4,7 @@
         <div class="word-detail-title">
 			<!-- <h2></h2> -->
 			<h2>{{word.word}}</h2>
+			<h2>{{word.hiragana}}</h2>
 			<NSwitch v-model:value="nextAutoPlay">
 				<template #checked>自动播放</template>
 				<template #unchecked>静音</template>
@@ -12,12 +13,12 @@
         
         <div class="word-detail-image-body">
             <div class="word-detail-image-box" v-for="item in word.values" :key="item">
-                <img class="word-detail-image" :class="{failed:item.status == 1 ,success:item.status == 2}" :src="'/image/'+item.name+'.jpg'" @click="clickWord(item)"/>
+                <img class="word-detail-image" :class="{failed:item.status == 1 ,success:item.status == 2}" :src="item.image_url" @click="clickWord(item)"/>
             </div>
         </div>
 
 		<div class="word-detail-control-body">
-			<NButton class="word-detail-control-button" @click="playAudio(word.name)">Play</NButton>
+			<NButton class="word-detail-control-button" @click="playAudio(word.audio_url)">Play</NButton>
 		</div>
         
     </div>
@@ -27,6 +28,7 @@
 <script>
 import {ref ,onMounted} from "vue"
 import { NSwitch } from 'naive-ui';
+import {authApi} from '@/api'
 export default {
 	name: 'WordDetail',
 	props: {
@@ -40,21 +42,24 @@ export default {
 		let wordIndex = 0;
 		let nextAutoPlay = ref(false)
 		let audioPlay = new Audio()
-		const wordList=[{name:1,word:'あき'},{name:2,word:'あめ'},{name:3,word:'いぬ'},
-						{name:4,word:'あり'},{name:5,word:'いか'},{name:6,word:'いちご'},
-						{name:7,word:'うま'},{name:8,word:'うさぎ'},{name:9,word:'うちわ'},
-						{name:10,word:'えほん'},{name:11,word:'えび'},{name:12,word:'えき'}];
+		var wordList=[];
 		onMounted(()=>{
-			wordIndex = Math.floor(Math.random() * (wordList.length - 1))+1
-			updateWord()
+			authApi.allWords().then((res)=>{
+				if (res.status == 200) {
+					console.log(res.data)
+					wordList = res.data
+					wordIndex = Math.floor(Math.random() * (wordList.length - 1))+1
+					updateWord()
+				}
+			})
 		});
 		const randomSort= ()=>{
 			return Math.random() > 0.5 ? -1 : 1;
 		};
 		const clickWord = (item) => {
-			if(word.value.name != item.name) {
+			if(word.value.word_id != item.word_id) {
 				item.status = 1
-				playAudio('error').then(()=>{
+				playAudio('https://objectstorage.ap-tokyo-1.oraclecloud.com/n/nrdsxugarz32/b/bucket-20211103-1156/o/kids%2Fmp3%2Ferror.mp3').then(()=>{
 					item.status = 0
 				}).catch(()=>{
 					item.status = 0
@@ -81,27 +86,29 @@ export default {
 			let newWord = wordList[wordIndex]
 			if (!newWord.values) {
 				newWord.values = []
-				newWord.values.push({name:newWord.name,status:0})
+				newWord.status = 0
+				newWord.values.push(newWord)
 				while (newWord.values.length < 4) {
-					let num = Math.floor(Math.random() * (wordList.length - 1))+1
-					if (num != newWord.name && !newWord.values.some(e => e.name === num)) {
-						newWord.values.push({name:num,status:0})
+					let index = Math.floor(Math.random() * (wordList.length - 1))+1
+					let valueWord = wordList[index]
+					if (valueWord.word_id != newWord.word_id && !newWord.values.some(e => e.word_id === valueWord.word_id)) {
+						valueWord.status = 0
+						newWord.values.push(valueWord)
 					}
 				}
 				newWord.values.sort(randomSort)
 			}
 			word.value = newWord
 			if (nextAutoPlay.value) {
-				playAudio(word.value.name)
+				playAudio(word.value.audio_url)
 			}
 		};
-		const playAudio = (name) =>{
+		const playAudio = (url) =>{
 			return new Promise((resolve,reject) =>{
-				if (!name || name == "") {
+				if (!url || url == "") {
 					reject()
 					return
 				}
-				let url = '/mp3/'+name+'.mp3'
 				if (audioPlay) {
 					if (!audioPlay.paused) {
 						audioPlay.pause()
@@ -110,11 +117,9 @@ export default {
 				}
 				audioPlay = new Audio(url)
 				audioPlay.addEventListener('ended',()=>{
-					console.log('播放完毕')
 					resolve()
 				})
 				audioPlay.addEventListener('pause',() =>{
-					console.log('取消播放')
 					resolve()
 				})
 				audioPlay.play()

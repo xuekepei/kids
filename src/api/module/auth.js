@@ -8,9 +8,16 @@ export default function(api) {
         search(word) {
             return api.get(apiBaseUrl + "/search?word=" + word);
         },
+        letterWords(letter) {
+            return api.get(apiBaseUrl + "/letter/" + letter + "/words")
+        },
+        allWords() {
+            return api.get(apiBaseUrl + "/words")
+        },
         add(letter,data) {
             return api.post(apiBaseUrl + "/letter/" + letter + "/words",data)
         }
+        
         
     }
 }
