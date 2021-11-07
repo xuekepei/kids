@@ -28,10 +28,13 @@
 
                     <Cropper :aspectRatio="16 / 16" @crop="getCover" />
 
+					<n-select v-model:value="selectLetter" :options="letterOptions" placeholder="选择单词分类" />
+
                     <n-space class="add-content-body-search-button" justify="space-between">
                         <n-button @click="current = 1">上一步</n-button>
+						
                         <n-button :loading="requestLoading" @click="add">添加</n-button>
-                        <div></div>
+                        <!-- <div></div> -->
                     </n-space>
 
                 </div>
@@ -40,21 +43,21 @@
     </div>
 </template>
 <script>
-import {ref, reactive} from "vue"
-import { NInput, NSpace, NSteps, NStep, NButton, NGrid, NGridItem, NCard} from 'naive-ui';
+import {ref, reactive, onMounted, defineComponent} from "vue"
+import { NInput, NSpace, NSteps, NStep, NGrid, NGridItem, NCard, NSelect} from 'naive-ui';
 import {authApi} from '@/api'
 import Cropper from "@/components/Cropper.vue";
 
-export default {
+export default defineComponent({
     components:{
         NInput,
         NSpace,
         NSteps,
         NStep,
-        NButton,
         NGridItem,
         NGrid,
         NCard,
+		NSelect,
         Cropper
     },
     setup() {
@@ -64,6 +67,25 @@ export default {
         const selectWord = ref(null)
         var audioPlay = new Audio()
         const requestLoading = ref(false)
+		const selectLetter = ref(null)
+		const letterOptions = ref([])
+
+		onMounted(()=>{
+			authApi.letter().then((res)=>{
+				if (res.status == 200) {
+					const options = [];
+					res.data.forEach((item)=>{
+						options.push({
+							label:item.hiragana,
+							value:item.letter_id.toString()
+						})
+					})
+					letterOptions.value = options
+					console.log(options)
+				}
+				
+			})
+		});
 
 		const wordForm = reactive({
 			word: "",
@@ -91,11 +113,14 @@ export default {
 			})
         };
         const add = () =>{
+			if (!selectLetter.value) {
+				return
+			}
 			if (wordForm.imageBase64 == "" || wordForm.word == "") {
 				return
 			}
 			requestLoading.value = true
-            authApi.add("1",wordForm).then((res)=>{
+            authApi.add(selectLetter.value,wordForm).then((res)=>{
                 requestLoading.value = false
                 if (res.status === 200) {
                     setTimeout(()=>{
@@ -109,6 +134,7 @@ export default {
         };
 
         const select = (word) =>{
+			console.log(selectLetter.value)
 			if (selectWord.value && word.word != selectWord.value.word) {
 				wordForm.imageBase64 = ""
 			}
@@ -158,10 +184,12 @@ export default {
             selectWord,
             playAudio,
             requestLoading,
-            getCover
+            getCover,
+			selectLetter,
+			letterOptions,
         };
     },
-}
+})
 </script>
 
 <style scoped>
