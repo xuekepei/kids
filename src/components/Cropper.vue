@@ -21,6 +21,7 @@
 </template>
 <script>
 import VueCropper from "vue-cropperjs";
+import 'cropperjs/dist/cropper.css';
 import {NUpload, NModal, NButton, NSpace} from "naive-ui";
 import { ref } from "@vue/reactivity";
 
