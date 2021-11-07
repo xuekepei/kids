@@ -91,7 +91,7 @@ export default defineComponent({
 			word: "",
 			hiragana: "",
 			imageBase64: "",
-			mp3Url: "",
+			audioUrl: "",
 		});
 
         const search = () =>{
@@ -142,7 +142,7 @@ export default defineComponent({
             selectWord.value = word
 			wordForm.word = word.word
 			wordForm.hiragana = word.katakana
-			wordForm.mp3Url = word.audio_url
+			wordForm.audioUrl = word.audio_url
             playAudio(word.audio_url)
         };
         const playAudio = (url) =>{
