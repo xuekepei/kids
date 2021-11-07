@@ -13,7 +13,7 @@
                         <n-input v-model:value="wordKey" placeholder="输入单词"></n-input>
                     </n-space>
 
-                    <n-button class="add-content-body-search-button" :loading="searchLoading" @click="search">查询</n-button>
+                    <n-button class="add-content-body-search-button" :loading="requestLoading" @click="search">查询</n-button>
                     
                 </div>
 
@@ -30,7 +30,7 @@
 
                     <n-space class="add-content-body-search-button" justify="space-between">
                         <n-button @click="current = 1">上一步</n-button>
-                        <n-button @click="add">添加</n-button>
+                        <n-button :loading="requestLoading" @click="add">添加</n-button>
                         <div></div>
                     </n-space>
 
@@ -40,7 +40,7 @@
     </div>
 </template>
 <script>
-import {ref} from "vue"
+import {ref, reactive} from "vue"
 import { NInput, NSpace, NSteps, NStep, NButton, NGrid, NGridItem, NCard} from 'naive-ui';
 import {authApi} from '@/api'
 import Cropper from "@/components/Cropper.vue";
@@ -63,15 +63,22 @@ export default {
         const wordKey = ref("");
         const selectWord = ref(null)
         var audioPlay = new Audio()
-        const searchLoading = ref(false)
+        const requestLoading = ref(false)
+
+		const wordForm = reactive({
+			word: "",
+			hiragana: "",
+			imageBase64: "",
+			mp3Url: "",
+		});
 
         const search = () =>{
             if (!wordKey.value) { 
                 return
             }
-            searchLoading.value = true
+            requestLoading.value = true
             authApi.search(wordKey.value).then((res)=>{
-                searchLoading.value = false
+                requestLoading.value = false
                 if (res.status === 200) {
                     searchResult.value = res.data
                     if (searchResult.value.length > 0) {
@@ -79,15 +86,38 @@ export default {
                     }
                 }
                 // console.log(res)
-            })
+            }).catch(()=>{
+				requestLoading.value = false
+			})
         };
         const add = () =>{
-
+			if (wordForm.imageBase64 == "" || wordForm.word == "") {
+				return
+			}
+			requestLoading.value = true
+            authApi.add("1",wordForm).then((res)=>{
+                requestLoading.value = false
+                if (res.status === 200) {
+                    setTimeout(()=>{
+						currentRef.value = 1
+					},1000)  
+                }
+                // console.log(res)
+            }).catch(()=>{
+				requestLoading.value = false
+			})
         };
 
         const select = (word) =>{
+			if (selectWord.value && word.word != selectWord.value.word) {
+				wordForm.imageBase64 = ""
+			}
+
             selectWord.value = word
-            playAudio(selectWord.value.audio_url)
+			wordForm.word = word.word
+			wordForm.hiragana = word.katakana
+			wordForm.mp3Url = word.audio_url
+            playAudio(word.audio_url)
         };
         const playAudio = (url) =>{
 			return new Promise((resolve,reject) =>{
@@ -113,6 +143,7 @@ export default {
 		};
         const getCover = (base64) => {
         // form.coverImage = base64;
+			wordForm.imageBase64 = base64
             console.log(base64)
         };
 
@@ -126,7 +157,7 @@ export default {
             wordKey,
             selectWord,
             playAudio,
-            searchLoading,
+            requestLoading,
             getCover
         };
     },

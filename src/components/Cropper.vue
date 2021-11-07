@@ -4,8 +4,8 @@
 		<NButton icon="pi pi-check">图片选择 </NButton>
 	</NUpload>
 
-    <NModal title="图片裁切" preset="card" :style="bodyStyle" v-model:show="cropperDialogOpen" class="weshow-cropper-dialog">
-        <vue-cropper ref="cropper" class="weshow-cropper" :aspect-ratio="aspectRatio" :src="imgSrc" preview=".preview"/>
+    <NModal title="图片裁切" preset="card" :style="bodyStyle" v-model:show="cropperDialogOpen" class="cropper-dialog">
+        <vue-cropper ref="cropper" class="cropper" :aspect-ratio="aspectRatio" :src="imgSrc" preview=".preview"/>
         <template #footer>
             <NSpace justify="space-between">
                 <NButton icon="pi pi-times" class="p-button-text" @click="cropperDialogOpen = false">
@@ -56,18 +56,18 @@ export default {
     };
 
     const toCrop = () => {
-      let config = {
-        maxWidth: 450,
-        maxHeight: 450,
-      };
-      if (props.fixedMode) {
-        config = { width: props.width, height: props.height };
-      }
-      emit(
-        "crop",
-        cropper.value.getCroppedCanvas(config).toDataURL("image/jpeg", 0.8)
-      );
-      cropperDialogOpen.value = false;
+        let config = {
+            maxWidth: 450,
+            maxHeight: 450,
+        };
+        if (props.fixedMode) {
+            config = { width: props.width, height: props.height };
+        }
+        emit(
+            "crop",
+            cropper.value.getCroppedCanvas(config).toDataURL("image/jpeg", 0.8)
+        );
+        cropperDialogOpen.value = false;
     };
     return { cropper, cropperDialogOpen, imgSrc, uploadImage, toCrop, uploder ,
 	bodyStyle: {
@@ -77,10 +77,10 @@ export default {
 };
 </script>
 <style scoped>
-.weshow-cropper {
+.cropper {
   max-height: 60vh;
 }
-.weshow-cropper-dialog {
+.cropper-dialog {
   width: 90%;
   max-width: 600px;
 }
