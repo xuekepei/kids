@@ -44,14 +44,13 @@
 </template>
 <script>
 import {ref, reactive, onMounted, defineComponent} from "vue"
-import { NInput, NSpace, NSteps, NStep, NGrid, NGridItem, NCard, NSelect} from 'naive-ui';
+import { NInput, NSteps, NStep, NGrid, NGridItem, NCard, NSelect, useMessage} from 'naive-ui';
 import {authApi} from '@/api'
 import Cropper from "@/components/Cropper.vue";
 
 export default defineComponent({
     components:{
         NInput,
-        NSpace,
         NSteps,
         NStep,
         NGridItem,
@@ -69,7 +68,7 @@ export default defineComponent({
         const requestLoading = ref(false)
 		const selectLetter = ref(null)
 		const letterOptions = ref([])
-
+		const message = useMessage()
 		onMounted(()=>{
 			authApi.letter().then((res)=>{
 				if (res.status == 200) {
@@ -81,7 +80,6 @@ export default defineComponent({
 						})
 					})
 					letterOptions.value = options
-					console.log(options)
 				}
 				
 			})
@@ -96,6 +94,7 @@ export default defineComponent({
 
         const search = () =>{
             if (!wordKey.value) { 
+				message.error("单词不能为空")
                 return
             }
             requestLoading.value = true
@@ -107,28 +106,36 @@ export default defineComponent({
                         currentRef.value = 2
                     }
                 }
-                // console.log(res)
             }).catch(()=>{
+				message.error("没有查到这个单词")
 				requestLoading.value = false
 			})
         };
         const add = () =>{
 			if (!selectLetter.value) {
+				message.error("请选择字母")
 				return
 			}
-			if (wordForm.imageBase64 == "" || wordForm.word == "") {
+			if (wordForm.word == "") {
+				message.error("请选择单词")
+				return
+			}
+			if (wordForm.imageBase64 == "") {
+				message.error("请选择首图片")
 				return
 			}
 			requestLoading.value = true
             authApi.add(selectLetter.value,wordForm).then((res)=>{
                 requestLoading.value = false
                 if (res.status === 200) {
+					message.success('添加成功')
                     setTimeout(()=>{
 						currentRef.value = 1
-					},1000)  
+					},2000)  
                 }
                 // console.log(res)
             }).catch(()=>{
+				message.error("添加失败,请稍后重试")
 				requestLoading.value = false
 			})
         };
@@ -168,7 +175,6 @@ export default defineComponent({
 			})
 		};
         const getCover = (base64) => {
-        // form.coverImage = base64;
 			wordForm.imageBase64 = base64
             console.log(base64)
         };

@@ -1,6 +1,20 @@
 <template>
-  <router-view/>
+  <AppProvider>
+    <router-view/>
+  </AppProvider>
 </template>
+
+<script>
+import { defineComponent } from 'vue';
+import AppProvider from '@/components/AppProvider.vue';
+
+export default defineComponent ({
+  name: 'App',
+  components: {
+    AppProvider,
+  },
+});
+</script>
 
 <style>
 #app {
