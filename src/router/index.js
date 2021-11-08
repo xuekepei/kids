@@ -5,7 +5,7 @@ const routes = [
     path: "/",
     name: "Home",
     meta: {
-      publicPage: false,
+      publicPage: true,
       adminType: "0",
     },
     component: () => import(/* webpackChunkName: "Admin" */ '../views/kids/Index.vue')

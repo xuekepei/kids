@@ -17,9 +17,10 @@
     </div>
 </template>
 <script>
-import { computed ,ref} from '@vue/reactivity';
+import { computed ,ref, onMounted} from 'vue';
 import { NIcon , NDivider} from 'naive-ui'
 import { MenuOutline} from '@vicons/ionicons5'
+import { useRoute, useRouter } from "vue-router";
 
 export default {
     components:{
@@ -28,7 +29,15 @@ export default {
         NDivider
 	},
     setup() {
-        const showMenu = ref(false)
+
+        const router = useRouter();
+        const route = useRoute();
+        const showMenu = ref(false);
+        onMounted(()=>{ 
+            router.replace({
+                path: "/learn",
+            })
+        });
         const menuData = computed(() =>{
             const newMenuData = [];
             newMenuData.push({
@@ -78,6 +87,7 @@ export default {
 }
 .kids-body.collapsed {
     margin-left: 150px;
+    transition: margin-left 0.5s;
 }
 
 .menu-bar {

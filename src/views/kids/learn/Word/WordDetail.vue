@@ -45,7 +45,7 @@ export default {
 		let nextAutoPlay = ref(false)
 		let audioPlay = new Audio()
 		var wordList=[];
-		let loading = ref(false)
+		let loading = ref(false);
 		onMounted(()=>{
 			loading.value = true
 			authApi.allWords().then((res)=>{
