@@ -1,44 +1,40 @@
 <template>
-    <div class="add-background">
-        <div class="add-body">
+    <n-space style="margin-top:20px" vertical>
+        <n-steps :current="current" :status="currentStatus">
+            <n-step title="查询" />
+            <n-step title="添加" />
+        </n-steps>
+    </n-space>
+    <div class="add-content-body">
+        <div class="add-content-body-search" v-if="current === 1">
             <n-space vertical>
-                <n-steps :current="current" :status="currentStatus">
-                    <n-step title="查询" />
-                    <n-step title="添加" />
-                </n-steps>
+                <n-input v-model:value="wordKey" placeholder="输入单词"></n-input>
             </n-space>
-            <div class="add-content-body">
-                <div class="add-content-body-search" v-if="current === 1">
-                    <n-space vertical>
-                        <n-input v-model:value="wordKey" placeholder="输入单词"></n-input>
-                    </n-space>
 
-                    <n-button class="add-content-body-search-button" :loading="requestLoading" @click="search">查询</n-button>
-                    
-                </div>
+            <n-button class="add-content-body-search-button" :loading="requestLoading" @click="search">查询</n-button>
+            
+        </div>
 
-                <div class="add-content-body-add" v-if="current===2">
-                    <n-grid :x-gap="12" :y-gap="8" :cols="2">
-                        <n-grid-item v-for="item in searchResult" :key="item" @click="select(item)">
-                            <n-card class="add-content-body-add-card" :class="{selected:(selectWord != null && selectWord.word == item.word)}" :title="item.word">
-                                {{item.katakana}}
-                            </n-card>
-                        </n-grid-item>  
-                    </n-grid>
+        <div class="add-content-body-add" v-if="current===2">
+            <n-grid :x-gap="12" :y-gap="8" :cols="2">
+                <n-grid-item v-for="item in searchResult" :key="item" @click="select(item)">
+                    <n-card class="add-content-body-add-card" :class="{selected:(selectWord != null && selectWord.word == item.word)}" :title="item.word">
+                        {{item.katakana}}
+                    </n-card>
+                </n-grid-item>  
+            </n-grid>
 
-                    <Cropper :aspectRatio="16 / 16" @crop="getCover" />
+            <Cropper :aspectRatio="16 / 16" @crop="getCover" />
 
-					<n-select v-model:value="selectLetter" :options="letterOptions" placeholder="选择单词分类" />
+            <n-select v-model:value="selectLetter" :options="letterOptions" placeholder="选择单词分类" />
 
-                    <n-space class="add-content-body-search-button" justify="space-between">
-                        <n-button @click="current = 1">上一步</n-button>
-						
-                        <n-button :loading="requestLoading" @click="add">添加</n-button>
-                        <!-- <div></div> -->
-                    </n-space>
+            <n-space class="add-content-body-search-button" justify="space-between">
+                <n-button @click="current = 1">上一步</n-button>
+                
+                <n-button :loading="requestLoading" @click="add">添加</n-button>
+                <!-- <div></div> -->
+            </n-space>
 
-                </div>
-            </div>
         </div>
     </div>
 </template>

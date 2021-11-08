@@ -1,10 +1,12 @@
 <template>
-  <div class="detail-background">
-    <div class="word-detail-body ">
+	<n-spin v-if="loading">
+      	<template #description>你不知道你有多幸运</template>
+    </n-spin>
+    <div v-if="!loading">
         <div class="word-detail-title">
 			<!-- <h2></h2> -->
 			<h2>{{word.word}}</h2>
-			<h2>{{word.hiragana}}</h2>
+			<h3>{{word.hiragana}}</h3>
 			<NSwitch v-model:value="nextAutoPlay">
 				<template #checked>自动播放</template>
 				<template #unchecked>静音</template>
@@ -22,12 +24,11 @@
 		</div>
         
     </div>
-  </div>
 </template>
 
 <script>
 import {ref ,onMounted} from "vue"
-import { NSwitch } from 'naive-ui';
+import { NSwitch, NSpin } from 'naive-ui';
 import {authApi} from '@/api'
 export default {
 	name: 'WordDetail',
@@ -35,7 +36,8 @@ export default {
 		msg: String,
 	},
 	components:{
-		NSwitch
+		NSwitch,
+		NSpin
 	},
 	setup(){
 		let word = ref({})
@@ -43,14 +45,19 @@ export default {
 		let nextAutoPlay = ref(false)
 		let audioPlay = new Audio()
 		var wordList=[];
+		let loading = ref(false)
 		onMounted(()=>{
+			loading.value = true
 			authApi.allWords().then((res)=>{
+				loading.value = false
 				if (res.status == 200) {
 					console.log(res.data)
 					wordList = res.data
 					wordIndex = Math.floor(Math.random() * (wordList.length - 1))+1
 					updateWord()
 				}
+			}).catch(()=>{
+				loading.value = false
 			})
 		});
 		const randomSort= ()=>{
@@ -132,7 +139,8 @@ export default {
 			clickWord,
 			playAudio,
 			nextAutoPlay,
-			updateWord
+			updateWord,
+			loading
 		};
 	}
 }
@@ -141,7 +149,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h3 {
-  margin: 40px 0 0;
+  margin: 10px 0 0;
 }
 ul {
   list-style-type: none;
@@ -153,17 +161,6 @@ li {
 }
 a {
   color: #42b983;
-}
-.detail-background {
-    height: 100%;
-}
-.word-detail-body {
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    max-width: 500px;
-    min-height: 100%;
-    padding:0px 5px;
 }
 .word-detail-title {
     flex-direction: row;

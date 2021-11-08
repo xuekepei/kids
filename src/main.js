@@ -17,6 +17,6 @@ const naive = create({
 createApp(App)
 .use(store)
 .use(router)
-.use(VueSideBarMenu)
 .use(naive)
+.use(VueSideBarMenu)
 .mount('#app')
