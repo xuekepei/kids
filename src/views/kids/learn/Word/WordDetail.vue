@@ -68,7 +68,9 @@ export default {
 				item.status = 1
 				playAudio('https://objectstorage.ap-tokyo-1.oraclecloud.com/n/nrdsxugarz32/b/bucket-20211103-1156/o/kids%2Fmp3%2Ferror.mp3').then(()=>{
 					item.status = 0
+					word.value.values.sort(randomSort)
 				}).catch(()=>{
+					word.value.values.sort(randomSort)
 					item.status = 0
 				})
 				return

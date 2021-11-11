@@ -98,6 +98,7 @@ export default defineComponent({
                 requestLoading.value = false
                 if (res.status === 200) {
                     searchResult.value = res.data
+                    selectWord.value = null
                     if (searchResult.value.length > 0) {
                         currentRef.value = 2
                     }
