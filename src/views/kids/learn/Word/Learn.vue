@@ -19,7 +19,7 @@
         </div>
 
 		<div class="leart-word-control-body">
-			<NButton class="leart-word-control-button" @click="playAudio(word.audio_url)">Play</NButton>
+			<NButton :type="autoPlay?'warning':''" @click="autoPlayAction">{{autoPlay ? ((autoPlayNum>=0 ? autoPlayNum:"  ") + " 停止"): "自动播放"}}</NButton>
 		</div>
         
     </div>
@@ -27,7 +27,7 @@
 
 <script>
 import {ref ,onMounted} from "vue"
-import { NSpin, NCard } from 'naive-ui';
+import { NSpin, NCard, NSwitch } from 'naive-ui';
 import {authApi} from '@/api'
 export default {
 	name: 'Learn',
@@ -36,7 +36,8 @@ export default {
 	},
 	components:{
 		NSpin,
-        NCard
+        NCard,
+		NSwitch
 	},
 	setup(){
 		let word = ref({})
@@ -44,6 +45,9 @@ export default {
 		let audioPlay = new Audio()
 		var wordList=[];
 		let loading = ref(false)
+		let autoPlay = ref(false);
+		let autoPlayTimer = null;
+		let autoPlayNum = ref(3);
 		onMounted(()=>{
 			loading.value = true
 			authApi.allWords().then((res)=>{
@@ -70,7 +74,9 @@ export default {
 		const updateWord =() =>{
 			let newWord = wordList[wordIndex]
 			word.value = newWord
-			playAudio(word.value.audio_url)
+			playAudio(word.value.audio_url).then(()=>{
+				autoPlayNum.value = 3
+			})
 		};
 		const playAudio = (url) =>{
 			return new Promise((resolve,reject) =>{
@@ -94,6 +100,23 @@ export default {
 				audioPlay.play()
 			})
 		};
+		const autoPlayAction = () => {
+			autoPlay.value = !autoPlay.value
+			if (autoPlay.value) {
+				autoPlayNum.value = 3
+				autoPlayTimer = setInterval(()=>{
+					autoPlayNum.value -= 1
+					console.log(autoPlayNum.value)
+					if (autoPlayNum.value == 0) {
+						onNext()
+					}
+				},1000)
+			} else {
+				clearInterval(autoPlayTimer)
+				autoPlayTimer = null
+				autoPlayNum.value = 3
+			}
+		};
 		return {
 			wordIndex,
 			wordList,
@@ -101,7 +124,11 @@ export default {
 			onNext,
 			playAudio,
 			updateWord,
-			loading
+			loading,
+			autoPlay,
+			autoPlayAction,
+			autoPlayTimer,
+			autoPlayNum
 		};
 	}
 }
