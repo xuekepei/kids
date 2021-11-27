@@ -2,7 +2,7 @@
 	<n-spin v-if="loading">
       	<template #description>你不知道你有多幸运</template>
     </n-spin>
-    <div v-if="!loading" @click="onNext">
+    <div v-if="!loading" @click="onNext(false)">
        
         <div class="learn-word-card">
             <n-card :title="word.word">
@@ -19,7 +19,7 @@
         </div>
 
 		<div class="leart-word-control-body">
-			<NButton :type="autoPlay?'warning':''" @click="autoPlayAction">{{autoPlay ? ((autoPlayNum>=0 ? autoPlayNum:"  ") + " 停止"): "自动播放"}}</NButton>
+			<NButton :type="autoPlay?'warning':''" @click="autoPlayAction">{{autoPlay ? (autoPlayNum + " 停止"): "自动播放"}}</NButton>
 		</div>
         
     </div>
@@ -36,15 +36,15 @@ export default {
 	},
 	components:{
 		NSpin,
-        NCard,
+    NCard,
 		NSwitch
 	},
 	setup(){
 		let word = ref({})
 		let wordIndex = 0;
 		let audioPlay = new Audio()
-		var wordList=[];
-		let loading = ref(false)
+    let wordList = [];
+    let loading = ref(false)
 		let autoPlay = ref(false);
 		let autoPlayTimer = null;
 		let autoPlayNum = ref(3);
@@ -61,8 +61,13 @@ export default {
 				loading.value = false
 			})
 		});
-		const onNext = ()=> {
-			
+		const onNext = (auto)=> {
+      if (!auto) {
+        if (autoPlay.value){
+          return
+        }
+      }
+
 			if (wordIndex<wordList.length-1) {
 				wordIndex+=1
 			} else {
@@ -75,7 +80,9 @@ export default {
 			let newWord = wordList[wordIndex]
 			word.value = newWord
 			playAudio(word.value.audio_url).then(()=>{
-				autoPlayNum.value = 3
+        if(autoPlay.value) {
+          startNextWordTimer()
+        }
 			})
 		};
 		const playAudio = (url) =>{
@@ -103,20 +110,26 @@ export default {
 		const autoPlayAction = () => {
 			autoPlay.value = !autoPlay.value
 			if (autoPlay.value) {
-				autoPlayNum.value = 3
-				autoPlayTimer = setInterval(()=>{
-					autoPlayNum.value -= 1
-					console.log(autoPlayNum.value)
-					if (autoPlayNum.value == 0) {
-						onNext()
-					}
-				},1000)
+				startNextWordTimer()
 			} else {
-				clearInterval(autoPlayTimer)
-				autoPlayTimer = null
-				autoPlayNum.value = 3
+				stopNextWordTimer()
 			}
 		};
+    const startNextWordTimer = () =>{
+      autoPlayNum.value = 3
+      autoPlayTimer = setInterval(()=>{
+        autoPlayNum.value -= 1
+        if (autoPlayNum.value == 0) {
+          stopNextWordTimer()
+          onNext(true)
+        }
+      },1000)
+    };
+    const stopNextWordTimer =() =>{
+      clearInterval(autoPlayTimer)
+      autoPlayTimer = null
+      // autoPlayNum.value = 3
+    };
 		return {
 			wordIndex,
 			wordList,
@@ -128,7 +141,9 @@ export default {
 			autoPlay,
 			autoPlayAction,
 			autoPlayTimer,
-			autoPlayNum
+			autoPlayNum,
+      startNextWordTimer,
+      stopNextWordTimer
 		};
 	}
 }
