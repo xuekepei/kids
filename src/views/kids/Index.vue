@@ -52,6 +52,10 @@ export default {
                 href:"/add",
                 title:"Add"
             });
+            newMenuData.push({
+              href:"/manage",
+              title:"Manage"
+            });
             return newMenuData
         });
 

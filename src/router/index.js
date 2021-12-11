@@ -1,60 +1,69 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 
 const routes = [
-  {
-    path: "/",
-    name: "Home",
-    meta: {
-      publicPage: true,
-      adminType: "0",
+    {
+        path: "/",
+        name: "Home",
+        meta: {
+            publicPage: true,
+            adminType: "0",
+        },
+        component: () => import(/* webpackChunkName: "Admin" */ '../views/kids/Index.vue')
     },
-    component: () => import(/* webpackChunkName: "Admin" */ '../views/kids/Index.vue')
-  },
-  {
-    path: "/kids",
-    name: "Kids",
-    meta: {
-      publicPage: false,
-      adminType: "0",
-    },
-    component: () => import(/* webpackChunkName: "Admin" */ '../views/kids/Index.vue'),
-    children:[
-        {
-            path: "/learn",
-            name: "Learn",
-            meta: {
-              publicPage: false,
-              adminType: "1",
+    {
+        path: "/kids",
+        name: "Kids",
+        meta: {
+            publicPage: false,
+            adminType: "0",
+        },
+        component: () => import(/* webpackChunkName: "Admin" */ '../views/kids/Index.vue'),
+        children: [
+            {
+                path: "/learn",
+                name: "Learn",
+                meta: {
+                    publicPage: false,
+                    adminType: "1",
+                },
+                component: () => import(/* webpackChunkName: "learn" */ '../views/kids/learn/Word/Learn.vue')
             },
-            component: () => import(/* webpackChunkName: "learn" */ '../views/kids/learn/Word/Learn.vue')
-          },
-          {
-            path: "/test",
-            name: "Test",
-            meta: {
-              publicPage: false,
-              adminType: "1",
+            {
+                path: "/test",
+                name: "Test",
+                meta: {
+                    publicPage: false,
+                    adminType: "1",
+                },
+                component: () => import(/* webpackChunkName: "learn" */ '../views/kids/learn/Word/WordDetail.vue')
             },
-            component: () => import(/* webpackChunkName: "learn" */ '../views/kids/learn/Word/WordDetail.vue')
-          },
-          {
-            path: "/add",
-            name: "Add",
-            meta: {
-              publicPage: false,
-              adminType: "1",
+            {
+                path: "/add",
+                name: "Add",
+                meta: {
+                    publicPage: false,
+                    adminType: "1",
+                },
+                component: () => import(/* webpackChunkName: "learn" */ '../views/kids/admin/add/Add.vue')
             },
-            component: () => import(/* webpackChunkName: "learn" */ '../views/kids/admin/add/Add.vue')
-          }
-    ]
-  }
-  ,
-  {   path: "/:pathMatch(.*)*", redirect: "/"},
+            {
+                path: "/manage",
+                name: "Manage",
+                meta: {
+                    publicPage: false,
+                    adminType: "1",
+                },
+                component: () => import(/* webpackChunkName: "manage" */ '../views/kids/admin/manage/Manage.vue')
+            }
+        ]
+    }
+    ,
+    {path: "/:pathMatch(.*)*", redirect: "/"},
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes
+    history: createWebHistory(process.env.BASE_URL),
+    routes
 })
 
 export default router

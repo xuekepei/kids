@@ -1,9 +1,9 @@
 <template>
-	<n-spin v-if="loading">
-      	<template #description>你不知道你有多幸运</template>
+  <n-spin v-if="loading">
+        <template #description>你不知道你有多幸运</template>
     </n-spin>
     <div v-if="!loading" @click="onNext(false)">
-       
+
         <div class="learn-word-card">
             <n-card :title="word.word">
                 <template #cover>
@@ -14,14 +14,14 @@
                         <h3>{{word.hiragana}}</h3>
                     </div>
                 </template>
-                 
+
             </n-card>
         </div>
 
-		<div class="leart-word-control-body">
-			<NButton :type="autoPlay?'warning':''" @click="autoPlayAction">{{autoPlay ? (autoPlayNum + " 停止"): "自动播放"}}</NButton>
-		</div>
-        
+    <div class="leart-word-control-body">
+      <NButton :type="autoPlay?'warning':''" @click="autoPlayAction">{{autoPlay ? (autoPlayNum + " 停止"): "自动播放"}}</NButton>
+    </div>
+
     </div>
 </template>
 
