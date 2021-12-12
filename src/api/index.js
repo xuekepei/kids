@@ -1,4 +1,4 @@
-import { createAPI } from "./create-api";
+import {createAPI} from "./create-api";
 import auth from "./module/auth";
 
 // import store from "../store";
