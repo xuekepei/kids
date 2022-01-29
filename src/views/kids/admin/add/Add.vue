@@ -19,17 +19,17 @@
             <n-grid :x-gap="12" :y-gap="8" :cols="2">
                 <n-grid-item v-for="item in searchResult" :key="item" @click="select(item)">
                     <n-card class="add-content-body-add-card"
-                            :class="{selected:(selectWord != null && selectWord.word == item.word)}" :title="item.word">
+                            :class="{selected:(selectWord != null && (selectWord.word+selectWord.katakana) == (item.word+item.katakana))}" :title="item.word">
                         {{ item.katakana }}
                     </n-card>
                 </n-grid-item>
             </n-grid>
 
-            <Cropper :aspectRatio="16 / 16" @crop="getCover"/>
+            <Cropper style="margin-top: 20px" :aspectRatio="16 / 16" @crop="getCover"/>
 
-            <n-select v-model:value="selectLetter" :options="letterOptions" placeholder="选择单词分类"/>
+            <n-select style="margin-top: 20px" v-model:value="selectLetter" :options="letterOptions" placeholder="选择单词分类"/>
 
-            <n-space class="add-content-body-search-button" justify="space-between">
+            <n-space style="margin-top: 20px" class="add-content-body-search-button" justify="space-between">
                 <n-button @click="current = 1">上一步</n-button>
 
                 <n-button :loading="requestLoading" @click="add">添加</n-button>
