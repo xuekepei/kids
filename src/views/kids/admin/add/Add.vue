@@ -67,7 +67,7 @@ export default defineComponent({
         const letterOptions = ref([])
         const message = useMessage()
         onMounted(() => {
-            authApi.letter().then((res) => {
+            authApi.letters().then((res) => {
                 if (res.status == 200) {
                     const options = [];
                     res.data.forEach((item) => {

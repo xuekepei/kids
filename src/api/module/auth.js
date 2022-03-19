@@ -1,21 +1,22 @@
-const apiBaseUrl = process.env.VUE_APP_API_BASE_URL
+const kidsBaseUrl = process.env.VUE_APP_API_BASE_URL+'/kids'
+const dicBaseUrl = process.env.VUE_APP_API_BASE_URL+'/dic'
 
 export default function (api) {
     return {
-        letter() {
-            return api.get(apiBaseUrl + "/letter")
+        letters() {
+            return api.get(kidsBaseUrl + "/letters")
         },
         search(word) {
-            return api.get(apiBaseUrl + "/search?word=" + word);
+            return api.get(dicBaseUrl + "/search?word=" + word);
         },
         letterWords(letter) {
-            return api.get(apiBaseUrl + "/letter/" + letter + "/words")
+            return api.get(kidsBaseUrl + "/letters/" + letter + "/words")
         },
         allWords() {
-            return api.get(apiBaseUrl + "/words")
+            return api.get(kidsBaseUrl + "/words")
         },
         add(letter, data) {
-            return api.post(apiBaseUrl + "/letter/" + letter + "/words", data)
+            return api.post(kidsBaseUrl + "/letters/" + letter + "/words", data)
         }
 
 
