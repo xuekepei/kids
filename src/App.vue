@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue'
 import AppProvider from '@/components/AppProvider.vue'
 
 export default defineComponent({

@@ -25,7 +25,8 @@
 import {computed, ref, onMounted} from 'vue';
 import {NIcon, NDivider} from 'naive-ui'
 import {MenuOutline} from '@vicons/ionicons5'
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { useMessage } from 'naive-ui'
 
 export default {
     components: {
@@ -35,12 +36,18 @@ export default {
     },
     setup() {
 
+        window.$message = useMessage()
+
+        const route = useRoute()
         const router = useRouter()
         const showMenu = ref(false)
-        onMounted(() => {
-            router.replace({
-                path: "/learn",
-            })
+        onMounted(async () => {
+            await router.isReady()
+            if (route.path === '/') {
+                await router.replace({
+                    path: "/learn",
+                })
+            }
         });
         const menuData = computed(() => {
             const newMenuData = [];

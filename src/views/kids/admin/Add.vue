@@ -39,11 +39,12 @@
         </div>
     </div>
 </template>
+
 <script>
-import {ref, reactive, onMounted, defineComponent} from "vue"
-import {NInput, NSteps, NStep, NGrid, NGridItem, NCard, NSelect, useMessage} from 'naive-ui';
-import {authApi} from '@/api'
-import Cropper from "@/components/Cropper.vue";
+import { ref, reactive, onMounted, defineComponent } from 'vue'
+import { NInput, NSteps, NStep, NGrid, NGridItem, NCard, NSelect, useMessage } from 'naive-ui'
+import { authApi } from '@/api'
+import Cropper from "@/components/Cropper.vue"
 
 export default defineComponent({
     components: {
@@ -61,7 +62,7 @@ export default defineComponent({
         const searchResult = ref([]);
         const wordKey = ref("");
         const selectWord = ref(null)
-        var audioPlay = new Audio()
+        let audioPlay = new Audio()
         const requestLoading = ref(false)
         const selectLetter = ref(null)
         const letterOptions = ref([])
