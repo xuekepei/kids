@@ -5,7 +5,7 @@
         </NUpload>
 
         <NModal title="图片裁切" preset="card" :style="bodyStyle" v-model:show="cropperDialogOpen" class="cropper-dialog">
-            <vue-cropper ref="cropper" class="cropper" :aspect-ratio="aspectRatio" :src="imgSrc" preview=".preview"/>
+            <vue-cropper ref="cropper" class="cropper" :viewMode="2" :aspect-ratio="aspectRatio" :src="imgSrc" preview=".preview"/>
             <template #footer>
                 <NSpace justify="space-between">
                     <NButton icon="pi pi-times" class="p-button-text" @click="cropperDialogOpen = false">
