@@ -1,5 +1,5 @@
-const kidsBaseUrl = process.env.VUE_APP_API_BASE_URL+'/kids'
-const dicBaseUrl = process.env.VUE_APP_API_BASE_URL+'/dic'
+const kidsBaseUrl = import.meta.env.VITE_API_BASE_URL+'/kids'
+const dicBaseUrl = import.meta.env.VITE_API_BASE_URL+'/dic'
 
 export default function (api) {
     return {
@@ -18,7 +18,5 @@ export default function (api) {
         add(letter, data) {
             return api.post(kidsBaseUrl + "/letters/" + letter + "/words", data)
         }
-
-
     }
 }

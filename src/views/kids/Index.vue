@@ -25,7 +25,7 @@
 import {computed, ref, onMounted} from 'vue';
 import {NIcon, NDivider} from 'naive-ui'
 import {MenuOutline} from '@vicons/ionicons5'
-import {useRoute, useRouter} from "vue-router";
+import { useRouter } from "vue-router";
 
 export default {
     components: {
@@ -35,9 +35,8 @@ export default {
     },
     setup() {
 
-        const router = useRouter();
-        const route = useRoute();
-        const showMenu = ref(false);
+        const router = useRouter()
+        const showMenu = ref(false)
         onMounted(() => {
             router.replace({
                 path: "/learn",
@@ -64,7 +63,8 @@ export default {
             return newMenuData
         });
 
-        const onSideBarItemClick = (e, i) => {
+        const onSideBarItemClick = () => {
+            // eslint-disable-line no-unused-vars
             onClickMenu()
         };
 
