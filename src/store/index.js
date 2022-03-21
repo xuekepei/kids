@@ -15,6 +15,11 @@ export default createStore({
     actions: {
         setToken({commit}, token) {
             commit('setToken', token)
+            localStorage.setItem('token', token)
+        },
+        logout({commit}) {
+            commit('setToken', '')
+            localStorage.removeItem('token')
         },
     },
     modules: {

@@ -48,7 +48,7 @@ export default {
             authApi.login(formValue.value).then(res => {
                 const jwt = res.data.token
                 store.dispatch('setToken', jwt)
-                localStorage.setItem('token', jwt)
+
                 message.success('登录成功')
                 router.replace({
                     path: "/add",

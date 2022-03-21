@@ -1,6 +1,7 @@
 import { createAPI } from "./create-api";
 import auth from "./module/auth";
 import store from "../store";
+import router from '@/router'
 import { useMessage } from "naive-ui";
 const message = useMessage()
 
@@ -27,6 +28,12 @@ api.interceptors.response.use (
     },
     error => {
         window.$message.error(error.response.data.message)
+        if (error.response.status === 401) {
+            store.dispatch("logout");
+            router.replace({
+                path: "/login",
+            })
+        }
         return Promise.reject(error);
     }
 )
