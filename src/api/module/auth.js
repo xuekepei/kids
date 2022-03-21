@@ -20,7 +20,7 @@ export default function (api) {
             return api.get(kidsBaseUrl + "/words")
         },
         add(letter, data) {
-            return api.post(kidsBaseUrl + "/letters/" + letter + "/words", data, { needAuth: true })
+            return api.post(kidsBaseUrl + "/letters/" + letter + "/words", data, { needToken: true })
         },
     }
 }
