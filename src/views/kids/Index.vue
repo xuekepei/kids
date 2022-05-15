@@ -1,6 +1,6 @@
 <template>
     <div class="kids-body-box">
-        <div class="kids-body" :class="{collapsed:showMenu}">
+        <div class="kids-body" :class="{collapsed:showMenu && isMobile}">
             <div class="menu-bar">
                 <n-space justify="space-between">
                     <n-button @click="onClickMenu">
@@ -49,6 +49,11 @@ export default {
                 })
             }
         });
+        const isMobile = computed(() => {
+          let flag = navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i);
+          return flag;
+
+        });
         const menuData = computed(() => {
             const newMenuData = [];
             newMenuData.push({
@@ -82,6 +87,7 @@ export default {
         return {
             menuData,
             showMenu,
+            isMobile,
             onClickMenu,
             onSideBarItemClick
         };
