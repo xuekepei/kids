@@ -7,16 +7,16 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@vicons/ionicons5": "^0.11.0",
-    "@vitejs/plugin-vue": "^2.2.4",
-    "axios": "^0.24.0",
-    "core-js": "^3.6.5",
-    "vite": "^2.8.6",
-    "vue": "^3.0.0",
+    "@vicons/ionicons5": "^0.12.0",
+    "@vitejs/plugin-vue": "^2.3.3",
+    "axios": "^0.27.2",
+    "core-js": "^3.22.5",
+    "vite": "^2.9.9",
+    "vue": "^3.2.33",
     "vue-cropperjs": "^5.0.0",
-    "vue-router": "^4.0.0-0",
-    "vue-sidebar-menu": "^5.1.2",
-    "vuex": "^4.0.0-0"
+    "vue-router": "^4.0.15",
+    "vue-sidebar-menu": "^5.2.3",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@vicons/fa": "^0.11.0",
