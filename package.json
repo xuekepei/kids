@@ -7,10 +7,14 @@
     "build": "vite build"
   },
   "dependencies": {
+    "@vicons/fa": "^0.11.0",
+    "@vicons/fluent": "^0.11.0",
     "@vicons/ionicons5": "^0.12.0",
     "@vitejs/plugin-vue": "^2.3.3",
     "axios": "^0.27.2",
     "core-js": "^3.22.5",
+    "naive-ui": "^2.19.11",
+    "vfonts": "^0.1.0",
     "vite": "^2.9.9",
     "vue": "^3.2.33",
     "vue-cropperjs": "^5.0.0",
@@ -19,14 +23,6 @@
     "vuex": "^4.0.2"
   },
   "devDependencies": {
-    "@vicons/fa": "^0.11.0",
-    "@vicons/fluent": "^0.11.0",
-    "@vue/cli-plugin-router": "~4.5.0",
-    "@vue/cli-plugin-vuex": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
-    "@vue/compiler-sfc": "^3.0.0",
-    "eslint": "^8.11.0",
-    "naive-ui": "^2.19.11",
-    "vfonts": "^0.1.0"
+    "eslint": "^8.11.0"
   }
 }

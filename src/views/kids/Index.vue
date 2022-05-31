@@ -22,11 +22,10 @@
     </div>
 </template>
 <script>
-import {computed, ref, onMounted} from 'vue';
-import {NIcon, NDivider} from 'naive-ui'
-import {MenuOutline} from '@vicons/ionicons5'
+import { computed, onMounted, ref } from 'vue';
+import { NDivider, NIcon, useMessage } from 'naive-ui'
+import { MenuOutline } from '@vicons/ionicons5'
 import { useRoute, useRouter } from "vue-router";
-import { useMessage } from 'naive-ui'
 
 export default {
     components: {
@@ -50,8 +49,7 @@ export default {
             }
         });
         const isMobile = computed(() => {
-          let flag = navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i);
-          return flag;
+            return navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i);
 
         });
         const menuData = computed(() => {
@@ -105,7 +103,7 @@ export default {
     flex-direction: column;
     max-width: 500px;
     min-height: 100%;
-    padding: 0px 5px;
+    padding: 0 5px;
     transition: margin-left 0.5s;
 }
 
