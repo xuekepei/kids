@@ -11,7 +11,7 @@ export default function (api) {
             return api.get(kidsBaseUrl + '/letters')
         },
         search(word) {
-            return api.get(dicBaseUrl + '/search?word=' + word);
+            return api.get(dicBaseUrl + '/search?word=' + word)
         },
         letterWords(letter) {
             return api.get(kidsBaseUrl + '/letters/' + letter + '/words')

@@ -22,10 +22,10 @@
     </div>
 </template>
 <script>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue'
 import { NDivider, NIcon, useMessage } from 'naive-ui'
 import { MenuOutline } from '@vicons/ionicons5'
-import { useRoute, useRouter } from "vue-router";
+import { useRoute, useRouter } from 'vue-router'
 
 export default {
     components: {
@@ -33,6 +33,8 @@ export default {
         MenuOutline,
         NDivider
     },
+    // eslint-disable-next-line vue/multi-word-component-names
+    name:'index',
     setup() {
 
         window.$message = useMessage()
@@ -44,43 +46,43 @@ export default {
             await router.isReady()
             if (route.path === '/') {
                 await router.replace({
-                    path: "/learn",
+                    path: '/learn',
                 })
             }
-        });
+        })
         const isMobile = computed(() => {
-            return navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i);
+            return navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)
 
-        });
+        })
         const menuData = computed(() => {
-            const newMenuData = [];
+            const newMenuData = []
             newMenuData.push({
-                href: "/test",
-                title: "Test"
-            });
+                href: '/test',
+                title: 'Test'
+            })
             newMenuData.push({
-                href: "/learn",
-                title: "Learn"
-            });
+                href: '/learn',
+                title: 'Learn'
+            })
             newMenuData.push({
-                href: "/add",
-                title: "Add"
-            });
+                href: '/add',
+                title: 'Add'
+            })
             newMenuData.push({
-                href: "/manage",
-                title: "Manage"
-            });
+                href: '/manage',
+                title: 'Manage'
+            })
             return newMenuData
-        });
+        })
 
         const onSideBarItemClick = () => {
             // eslint-disable-line no-unused-vars
             onClickMenu()
-        };
+        }
 
         const onClickMenu = () => {
             showMenu.value = !showMenu.value
-        };
+        }
 
         return {
             menuData,
@@ -88,7 +90,7 @@ export default {
             isMobile,
             onClickMenu,
             onSideBarItemClick
-        };
+        }
     },
 }
 </script>

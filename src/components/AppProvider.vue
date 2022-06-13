@@ -9,12 +9,12 @@
 </template>
 
 <script>
-import {defineComponent} from 'vue';
+import {defineComponent} from 'vue'
 import {
     NMessageProvider,
     NLoadingBarProvider,
     NDialogProvider,
-} from 'naive-ui';
+} from 'naive-ui'
 
 export default defineComponent({
     name: 'AppProvider',
@@ -23,5 +23,5 @@ export default defineComponent({
         NLoadingBarProvider,
         NDialogProvider,
     },
-});
+})
 </script>

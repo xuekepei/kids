@@ -25,7 +25,8 @@ export default {
         NFormItem,
         NInput,
     },
-    name: "Login",
+  // eslint-disable-next-line vue/multi-word-component-names
+    name: 'Login',
     setup() {
         const formRef = ref(null)
         const formValue = ref({
@@ -51,7 +52,7 @@ export default {
 
                 message.success('登录成功')
                 router.replace({
-                    path: "/add",
+                    path: '/add',
                 })
             })
 
@@ -63,7 +64,7 @@ export default {
             formValue,
             rules: {
                 username: {
-                    required: true, message: '请输入用户名', trigger: "blur"
+                    required: true, message: '请输入用户名', trigger: 'blur'
                 },
                 password: {
                     required: true, message: '请输入密码'

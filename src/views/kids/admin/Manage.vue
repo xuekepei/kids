@@ -19,11 +19,12 @@
 </template>
 
 <script>
-import {ref, onMounted} from "vue"
-import {NSpin, NCard, NSwitch, NList, NListItem, NImage} from 'naive-ui';
-import {authApi} from '@/api'
+import { ref, onMounted } from 'vue'
+import { NSpin, NCard, NSwitch, NList, NListItem, NImage } from 'naive-ui'
+import { authApi } from '@/api'
 
 export default {
+    // eslint-disable-next-line vue/multi-word-component-names
     name: 'Manage',
     props: {
         msg: String,
@@ -37,13 +38,13 @@ export default {
         NImage
     },
     setup() {
-        let wordIndex = 0;
+        let wordIndex = 0
         let audioPlay = new Audio()
-        let wordList = ref([]);
+        let wordList = ref([])
         let loading = ref(false)
-        let autoPlay = ref(false);
-        let autoPlayTimer = null;
-        let autoPlayNum = ref(3);
+        let autoPlay = ref(false)
+        let autoPlayTimer = null
+        let autoPlayNum = ref(3)
         onMounted(() => {
             loading.value = true
             authApi.allWords().then((res) => {
@@ -56,7 +57,7 @@ export default {
             }).catch(() => {
                 loading.value = false
             })
-        });
+        })
         const onNext = (auto) => {
             if (!auto) {
                 if (autoPlay.value) {
@@ -71,13 +72,13 @@ export default {
             }
             updateWord()
 
-        };
+        }
         const updateWord = () => {
             let newWord = wordList.value[wordIndex]
-        };
+        }
         const playAudio = (url) => {
             return new Promise((resolve, reject) => {
-                if (!url || url == "") {
+                if (!url || url == '') {
                     reject()
                     return
                 }
@@ -96,7 +97,7 @@ export default {
                 })
                 audioPlay.play()
             })
-        };
+        }
         const autoPlayAction = () => {
             autoPlay.value = !autoPlay.value
             if (autoPlay.value) {
@@ -104,7 +105,7 @@ export default {
             } else {
                 stopNextWordTimer()
             }
-        };
+        }
         const startNextWordTimer = () => {
             autoPlayNum.value = 3
             autoPlayTimer = setInterval(() => {
@@ -114,12 +115,12 @@ export default {
                     onNext(true)
                 }
             }, 1000)
-        };
+        }
         const stopNextWordTimer = () => {
             clearInterval(autoPlayTimer)
             autoPlayTimer = null
             // autoPlayNum.value = 3
-        };
+        }
         return {
             wordIndex,
             wordList,
@@ -133,7 +134,7 @@ export default {
             autoPlayNum,
             startNextWordTimer,
             stopNextWordTimer
-        };
+        }
     }
 }
 </script>

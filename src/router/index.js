@@ -3,29 +3,29 @@ import store from '../store'
 
 const routes = [
     {
-        path: "/",
-        name: "home",
-        component: ()=> import('../views/kids/Index.vue'),
+        path: '/',
+        name: 'home',
+        component: () => import('../views/kids/Index.vue'),
         children: [
             {
-                path: "/learn",
-                component: ()=> import('../views/kids/learn/Word/Learn.vue')
+                path: '/learn',
+                component: () => import('../views/kids/learn/Word/Learn.vue')
             },
             {
-                path: "/test",
-                component: ()=> import('../views/kids/learn/Word/WordDetail.vue')
+                path: '/test',
+                component: () => import('../views/kids/learn/Word/WordDetail.vue')
             },
             {
-                path: "/add",
-                name: "add",
-                component: ()=> import('../views/kids/admin/Add.vue'),
+                path: '/add',
+                name: 'add',
+                component: () => import('../views/kids/admin/Add.vue'),
                 meta: {
                     requiresAuth: true
                 }
             },
             {
-                path: "/manage",
-                component: ()=> import('../views/kids/admin/Manage.vue'),
+                path: '/manage',
+                component: () => import('../views/kids/admin/Manage.vue'),
                 meta: {
                     requiresAuth: true
                 }
@@ -33,11 +33,11 @@ const routes = [
         ]
     },
     {
-        path: "/login",
-        component: ()=> import('../views/kids/User/Login.vue')
+        path: '/login',
+        component: () => import('../views/kids/User/Login.vue')
     },
     {
-        path: "/:pathMatch(.*)*", redirect: "/"
+        path: '/:pathMatch(.*)*', redirect: '/'
     },
 ]
 

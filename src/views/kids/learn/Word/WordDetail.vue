@@ -28,9 +28,9 @@
 </template>
 
 <script>
-import {ref, onMounted} from "vue"
-import {NSwitch, NSpin} from 'naive-ui';
-import {authApi} from '@/api'
+import { ref, onMounted } from 'vue'
+import { NSwitch, NSpin } from 'naive-ui'
+import { authApi } from '@/api'
 
 export default {
     name: 'WordDetail',
@@ -43,11 +43,11 @@ export default {
     },
     setup() {
         let word = ref({})
-        let wordIndex = 0;
+        let wordIndex = 0
         let nextAutoPlay = ref(false)
         let audioPlay = new Audio()
-        var wordList = [];
-        let loading = ref(false);
+        var wordList = []
+        let loading = ref(false)
         onMounted(() => {
             loading.value = true
             authApi.allWords().then((res) => {
@@ -61,10 +61,10 @@ export default {
             }).catch(() => {
                 loading.value = false
             })
-        });
+        })
         const randomSort = () => {
-            return Math.random() > 0.5 ? -1 : 1;
-        };
+            return Math.random() > 0.5 ? -1 : 1
+        }
         const clickWord = (item) => {
             if (word.value.id != item.id) {
                 item.status = 1
@@ -82,7 +82,7 @@ export default {
                 onNext()
                 item.status = 0
             }, 500)
-        };
+        }
         const onNext = () => {
 
             if (wordIndex < wordList.length - 1) {
@@ -92,7 +92,7 @@ export default {
             }
             updateWord()
 
-        };
+        }
         const updateWord = () => {
             let newWord = wordList[wordIndex]
             if (!newWord.values) {
@@ -113,10 +113,10 @@ export default {
             if (nextAutoPlay.value) {
                 playAudio(word.value.audio_url)
             }
-        };
+        }
         const playAudio = (url) => {
             return new Promise((resolve, reject) => {
-                if (!url || url == "") {
+                if (!url || url == '') {
                     reject()
                     return
                 }
@@ -135,7 +135,7 @@ export default {
                 })
                 audioPlay.play()
             })
-        };
+        }
         return {
             wordIndex,
             wordList,
@@ -145,7 +145,7 @@ export default {
             nextAutoPlay,
             updateWord,
             loading
-        };
+        }
     }
 }
 </script>

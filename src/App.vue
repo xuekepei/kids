@@ -13,7 +13,7 @@ export default defineComponent({
     components: {
         AppProvider,
     },
-});
+})
 </script>
 
 <style>

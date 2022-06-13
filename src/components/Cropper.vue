@@ -5,7 +5,8 @@
         </NUpload>
 
         <NModal title="图片裁切" preset="card" :style="bodyStyle" v-model:show="cropperDialogOpen" class="cropper-dialog">
-            <vue-cropper ref="cropper" class="cropper" :viewMode="2" :aspect-ratio="aspectRatio" :src="imgSrc" preview=".preview"/>
+            <vue-cropper ref="cropper" class="cropper" :viewMode="2" :aspect-ratio="aspectRatio" :src="imgSrc"
+                         preview=".preview"/>
             <template #footer>
                 <NSpace justify="space-between">
                     <NButton icon="pi pi-times" class="p-button-text" @click="cropperDialogOpen = false">
@@ -20,13 +21,13 @@
     </div>
 </template>
 <script>
-import VueCropper from "vue-cropperjs";
-import 'cropperjs/dist/cropper.css';
-import {NUpload, NModal, NButton, NSpace} from "naive-ui";
-import {ref} from "@vue/reactivity";
+import VueCropper from 'vue-cropperjs'
+import 'cropperjs/dist/cropper.css'
+import { NUpload, NModal, NButton, NSpace } from 'naive-ui'
+import { ref } from 'vue'
 
 export default {
-    components: {VueCropper, NModal, NUpload, NButton, NSpace},
+    components: { VueCropper, NModal, NUpload, NButton, NSpace },
     props: {
         aspectRatio: {
             type: Number,
@@ -42,41 +43,41 @@ export default {
             default: false,
         },
     },
-    setup(props, {emit}) {
-        const cropperDialogOpen = ref(false);
-        const cropper = ref(null);
-        const imgSrc = ref("");
-        const uploder = ref(null);
+    setup(props, { emit }) {
+        const cropperDialogOpen = ref(false)
+        const cropper = ref(null)
+        const imgSrc = ref('')
+        const uploder = ref(null)
         const uploadImage = (event) => {
 
-            const file = event.file.file;
+            const file = event.file.file
             console.log(event)
-            imgSrc.value = URL.createObjectURL(file);
-            cropperDialogOpen.value = true;
-        };
+            imgSrc.value = URL.createObjectURL(file)
+            cropperDialogOpen.value = true
+        }
 
         const toCrop = () => {
             let config = {
                 maxWidth: 450,
                 maxHeight: 450,
-            };
+            }
             if (props.fixedMode) {
-                config = {width: props.width, height: props.height};
+                config = { width: props.width, height: props.height }
             }
             emit(
-                "crop",
-                cropper.value.getCroppedCanvas(config).toDataURL("image/jpeg", 0.8)
-            );
-            cropperDialogOpen.value = false;
-        };
+                'crop',
+                cropper.value.getCroppedCanvas(config).toDataURL('image/jpeg', 0.8)
+            )
+            cropperDialogOpen.value = false
+        }
         return {
             cropper, cropperDialogOpen, imgSrc, uploadImage, toCrop, uploder,
             bodyStyle: {
                 maxWidth: '600px'
             },
-        };
+        }
     },
-};
+}
 </script>
 <style scoped>
 .cropper {

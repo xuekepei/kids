@@ -41,14 +41,14 @@
 </template>
 
 <script>
-import {ref, reactive, onMounted, defineComponent} from "vue"
-import {NInput, NSteps, NStep, NGrid, NGridItem, NCard, NSelect, useMessage} from 'naive-ui';
-import {authApi} from '@/api'
-import Cropper from "@/components/Cropper";
+import { ref, reactive, onMounted } from 'vue'
+import { NInput, NSteps, NStep, NGrid, NGridItem, NCard, NSelect, useMessage } from 'naive-ui'
+import { authApi } from '@/api'
+import Cropper from '@/components/Cropper'
 
 export default {
-    name: "VueSearch",
-    props:{},
+    name: 'VueSearch',
+    props: {},
     components: {
         NInput,
         NSteps,
@@ -59,10 +59,10 @@ export default {
         NSelect,
         Cropper
     },
-    setup(){
-        const currentRef = ref(1);
-        const searchResult = ref([]);
-        const wordKey = ref("");
+    setup() {
+        const currentRef = ref(1)
+        const searchResult = ref([])
+        const wordKey = ref('')
         const selectWord = ref(null)
         var audioPlay = new Audio()
         const requestLoading = ref(false)
@@ -72,7 +72,7 @@ export default {
         onMounted(() => {
             authApi.letter().then((res) => {
                 if (res.status == 200) {
-                    const options = [];
+                    const options = []
                     res.data.forEach((item) => {
                         options.push({
                             label: item.hiragana,
@@ -82,17 +82,17 @@ export default {
                     letterOptions.value = options
                 }
             })
-        });
+        })
         let wordForm = reactive({
-            word: "",
-            hiragana: "",
-            imageBase64: "",
-            audioUrl: "",
-        });
+            word: '',
+            hiragana: '',
+            imageBase64: '',
+            audioUrl: '',
+        })
 
         const search = () => {
             if (!wordKey.value) {
-                message.error("单词不能为空")
+                message.error('单词不能为空')
                 return
             }
             requestLoading.value = true
@@ -106,21 +106,21 @@ export default {
                     }
                 }
             }).catch(() => {
-                message.error("没有查到这个单词")
+                message.error('没有查到这个单词')
                 requestLoading.value = false
             })
-        };
+        }
         const add = () => {
             if (!selectLetter.value) {
-                message.error("请选择字母")
+                message.error('请选择字母')
                 return
             }
-            if (wordForm.word == "") {
-                message.error("请选择单词")
+            if (wordForm.word == '') {
+                message.error('请选择单词')
                 return
             }
-            if (wordForm.imageBase64 == "") {
-                message.error("请选择首图片")
+            if (wordForm.imageBase64 == '') {
+                message.error('请选择首图片')
                 return
             }
             requestLoading.value = true
@@ -129,26 +129,26 @@ export default {
                 if (res.status === 200) {
                     message.success('添加成功')
                     wordForm = reactive({
-                        word: "",
-                        hiragana: "",
-                        imageBase64: "",
-                        audioUrl: "",
-                    });
+                        word: '',
+                        hiragana: '',
+                        imageBase64: '',
+                        audioUrl: '',
+                    })
                     setTimeout(() => {
                         currentRef.value = 1
                     }, 2000)
                 }
                 // console.log(res)
             }).catch(() => {
-                message.error("添加失败,请稍后重试")
+                message.error('添加失败,请稍后重试')
                 requestLoading.value = false
             })
-        };
+        }
 
         const select = (word) => {
             console.log(selectLetter.value)
             if (selectWord.value && word.word != selectWord.value.word) {
-                wordForm.imageBase64 = ""
+                wordForm.imageBase64 = ''
             }
 
             selectWord.value = word
@@ -156,10 +156,10 @@ export default {
             wordForm.hiragana = word.katakana
             wordForm.audioUrl = word.audio_url
             playAudio(word.audio_url)
-        };
+        }
         const playAudio = (url) => {
             return new Promise((resolve, reject) => {
-                if (!url || url == "") {
+                if (!url || url == '') {
                     reject()
                     return
                 }
@@ -178,11 +178,11 @@ export default {
                 })
                 audioPlay.play()
             })
-        };
+        }
         const getCover = (base64) => {
             wordForm.imageBase64 = base64
             console.log(base64)
-        };
+        }
 
         return {
             currentStatus: ref('process'),
@@ -198,7 +198,7 @@ export default {
             getCover,
             selectLetter,
             letterOptions,
-        };
+        }
     }
 }
 </script>
