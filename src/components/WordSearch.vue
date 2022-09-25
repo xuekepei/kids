@@ -1,48 +1,66 @@
 <template>
-    <n-space style="margin-top:20px" vertical>
-        <n-steps :current="current" :status="currentStatus">
-            <n-step title="查询"/>
-            <n-step title="添加"/>
-        </n-steps>
-    </n-space>
-    <div class="add-content-body">
-        <div class="add-content-body-search" v-if="current === 1">
-            <n-space vertical>
-                <n-input v-model:value="wordKey" placeholder="输入单词"></n-input>
+    <n-modal v-model:show="showModal" preset="dialog" :show-icon="false">
+        <template #header>
+            <n-space style="margin-top:20px" vertical>
+                <n-steps :current="current" :status="currentStatus">
+                    <n-step title="查询"/>
+                    <n-step title="添加" v-if="!editMode"/>
+                    <n-step title="编辑" v-else/>
+                </n-steps>
             </n-space>
+        </template>
+        <div class="add-content-body">
+            <div class="add-content-body-search" v-if="current === 1">
+                <n-form ref="searchFormRef" :model="searchForm" :rules="searchFormRules">
+                    <n-form-item label="单词" path="word">
+                        <n-input v-model:value="searchForm.word" placeholder="输入单词"></n-input>
+                    </n-form-item>
+                </n-form>
 
-            <n-button class="add-content-body-search-button" :loading="requestLoading" @click="search">查询</n-button>
+                <n-button class="add-content-body-search-button" :loading="requestLoading" @click="searchAction">查询
+                </n-button>
 
+            </div>
+
+            <div class="add-content-body-add" v-if="current===2">
+                <n-form ref="uploadFormRef" :model="searchForm" :rules="uploadFormRules">
+                    <n-form-item label="单词" path="word">
+                        <n-grid :x-gap="12" :y-gap="8" :cols="2">
+                            <n-grid-item v-for="item in searchResult" :key="item" @click="select(item)">
+                                <n-card class="add-content-body-add-card"
+                                        :class="{selected:(searchForm.word === item.word)}"
+                                        :title="item.word">
+                                    {{ item.katakana }}
+                                </n-card>
+                            </n-grid-item>
+                        </n-grid>
+                    </n-form-item>
+                    <n-form-item>
+                        <img class="word-edit-image" :src="searchForm.imageBase64" :alt="searchForm.word"
+                             v-if="searchForm.imageBase64">
+                        <Cropper :aspectRatio="16 / 16" @crop="getCover"/>
+                    </n-form-item>
+                    <n-form-item>
+                        <n-select v-model:value="selectLetter" :options="letterOptions" placeholder="选择单词分类"/>
+                    </n-form-item>
+                </n-form>
+
+                <n-space class="add-content-body-search-button" justify="space-between">
+                    <n-button @click="current = 1">上一步</n-button>
+
+                    <n-button :loading="requestLoading" v-if="!editMode" @click="addAction">添加</n-button>
+                    <n-button :loading="requestLoading" v-else @click="editAction">添加</n-button>
+                    <!-- <div></div> -->
+                </n-space>
+
+            </div>
         </div>
-
-        <div class="add-content-body-add" v-if="current===2">
-            <n-grid :x-gap="12" :y-gap="8" :cols="2">
-                <n-grid-item v-for="item in searchResult" :key="item" @click="select(item)">
-                    <n-card class="add-content-body-add-card"
-                            :class="{selected:(selectWord != null && selectWord.word == item.word)}" :title="item.word">
-                        {{ item.katakana }}
-                    </n-card>
-                </n-grid-item>
-            </n-grid>
-
-            <Cropper :aspectRatio="16 / 16" @crop="getCover"/>
-
-            <n-select v-model:value="selectLetter" :options="letterOptions" placeholder="选择单词分类"/>
-
-            <n-space class="add-content-body-search-button" justify="space-between">
-                <n-button @click="current = 1">上一步</n-button>
-
-                <n-button :loading="requestLoading" @click="add">添加</n-button>
-                <!-- <div></div> -->
-            </n-space>
-
-        </div>
-    </div>
+    </n-modal>
 </template>
 
 <script>
-import { ref, reactive, onMounted } from 'vue'
-import { NInput, NSteps, NStep, NGrid, NGridItem, NCard, NSelect, useMessage } from 'naive-ui'
+import { ref, onMounted } from 'vue'
+import { NInput, NSteps, NStep, NGrid, NGridItem, NCard, NSelect, NModal, NForm, NFormItem, useMessage } from 'naive-ui'
 import { authApi } from '@/api'
 import Cropper from '@/components/Cropper'
 
@@ -56,22 +74,47 @@ export default {
         NGridItem,
         NGrid,
         NCard,
+        NModal,
         NSelect,
+        NForm,
+        NFormItem,
         Cropper
     },
     setup() {
+        const showModal = ref(false)
         const currentRef = ref(1)
         const searchResult = ref([])
-        const wordKey = ref('')
-        const selectWord = ref(null)
         var audioPlay = new Audio()
         const requestLoading = ref(false)
         const selectLetter = ref(null)
         const letterOptions = ref([])
         const message = useMessage()
+        const editMode = ref(false)
+        const searchFormRef = ref(null)
+        const searchForm = ref({
+            word: '',
+            hiragana: '',
+            imageBase64: '',
+            audioUrl: '',
+        })
+        const searchFormRules = {
+            word: {
+                required: true,
+                message: '请输入单词',
+                trigger: 'blur'
+            }
+        }
+        const uploadFormRef = ref(null)
+        const uploadFormRules = {
+            word: {
+                required: true,
+                message: '请输入单词',
+                trigger: 'blur'
+            }
+        }
         onMounted(() => {
-            authApi.letter().then((res) => {
-                if (res.status == 200) {
+            authApi.letters().then((res) => {
+                if (res.status === 200) {
                     const options = []
                     res.data.forEach((item) => {
                         options.push({
@@ -83,58 +126,82 @@ export default {
                 }
             })
         })
-        let wordForm = reactive({
-            word: '',
-            hiragana: '',
-            imageBase64: '',
-            audioUrl: '',
-        })
 
-        const search = () => {
-            if (!wordKey.value) {
-                message.error('单词不能为空')
-                return
+        const newForm = () => {
+            searchForm.value = {
+                word: null
             }
+        }
+        const editForm = (item) => {
+            searchForm.value = {
+                id: item.id,
+                word: item.word,
+                hiragana: item.hiragana,
+                audio_url: item.audio_url,
+                imageBase64: item.image_url,
+                letter_id: item.letter_id,
+
+            }
+        }
+
+        const searchAction = (e) => {
+            e.preventDefault()
+            searchFormRef.value.validate((errors) => {
+                if (errors) {
+                    return
+                }
+                search()
+            })
+        }
+        const search = () => {
             requestLoading.value = true
-            authApi.search(wordKey.value).then((res) => {
+            authApi.search(searchForm.value.word).then((res) => {
                 requestLoading.value = false
-                if (res.status === 200) {
-                    searchResult.value = res.data
-                    selectWord.value = null
-                    if (searchResult.value.length > 0) {
-                        currentRef.value = 2
-                    }
+                searchResult.value = res.data
+                if (searchResult.value.length > 0) {
+                    currentRef.value = 2
                 }
             }).catch(() => {
-                message.error('没有查到这个单词')
                 requestLoading.value = false
             })
         }
-        const add = () => {
+        const addAction = () => {
             if (!selectLetter.value) {
                 message.error('请选择字母')
                 return
             }
-            if (wordForm.word == '') {
-                message.error('请选择单词')
-                return
-            }
-            if (wordForm.imageBase64 == '') {
-                message.error('请选择首图片')
-                return
-            }
+
             requestLoading.value = true
-            authApi.add(selectLetter.value, wordForm).then((res) => {
+            authApi.add(selectLetter.value, searchForm.value).then((res) => {
                 requestLoading.value = false
                 if (res.status === 200) {
                     message.success('添加成功')
-                    wordForm = reactive({
-                        word: '',
-                        hiragana: '',
-                        imageBase64: '',
-                        audioUrl: '',
-                    })
+                    newForm()
                     setTimeout(() => {
+                        showModal.value = false
+                        currentRef.value = 1
+                    }, 2000)
+                }
+                // console.log(res)
+            }).catch(() => {
+                message.error('添加失败,请稍后重试')
+                requestLoading.value = false
+            })
+        }
+        const editAction = () => {
+            if (!selectLetter.value) {
+                message.error('请选择字母')
+                return
+            }
+
+            requestLoading.value = true
+            authApi.add(selectLetter.value, searchForm.value).then((res) => {
+                requestLoading.value = false
+                if (res.status === 200) {
+                    message.success('添加成功')
+                    newForm()
+                    setTimeout(() => {
+                        showModal.value = false
                         currentRef.value = 1
                     }, 2000)
                 }
@@ -147,19 +214,18 @@ export default {
 
         const select = (word) => {
             console.log(selectLetter.value)
-            if (selectWord.value && word.word != selectWord.value.word) {
-                wordForm.imageBase64 = ''
+            if (word.word !== searchForm.value.word) {
+                searchForm.value.imageBase64 = ''
             }
 
-            selectWord.value = word
-            wordForm.word = word.word
-            wordForm.hiragana = word.katakana
-            wordForm.audioUrl = word.audio_url
+            searchForm.value.word = word.word
+            searchForm.value.hiragana = word.katakana
+            searchForm.value.audioUrl = word.audio_url
             playAudio(word.audio_url)
         }
         const playAudio = (url) => {
             return new Promise((resolve, reject) => {
-                if (!url || url == '') {
+                if (!url || url === '') {
                     reject()
                     return
                 }
@@ -180,24 +246,46 @@ export default {
             })
         }
         const getCover = (base64) => {
-            wordForm.imageBase64 = base64
+            searchForm.value.imageBase64 = base64
             console.log(base64)
+        }
+
+        const show = (item) => {
+            if (item) {
+                editMode.value = true
+                searchResult.value = []
+                editForm(item)
+                search()
+            } else {
+                editMode.value = false
+                newForm()
+                currentRef.value = 1
+            }
+
+            showModal.value = true
         }
 
         return {
             currentStatus: ref('process'),
             current: currentRef,
+            searchForm,
+            searchFormRef,
+            searchFormRules,
+            uploadFormRef,
+            uploadFormRules,
             searchResult,
-            search,
-            add,
+            searchAction,
+            addAction,
+            editAction,
+            editMode,
             select,
-            wordKey,
-            selectWord,
             playAudio,
             requestLoading,
             getCover,
             selectLetter,
             letterOptions,
+            showModal,
+            show
         }
     }
 }
@@ -229,5 +317,10 @@ export default {
 
 .add-content-body-add-card.selected {
     border: solid 2px green;
+}
+
+.word-edit-image {
+    max-height: 200px;
+    max-width: 200px;
 }
 </style>

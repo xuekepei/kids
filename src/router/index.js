@@ -14,18 +14,17 @@ const routes = [
             {
                 path: '/test',
                 component: () => import('../views/kids/learn/Word/WordDetail.vue')
-            },
-            {
-                path: '/add',
-                name: 'add',
-                component: () => import('../views/kids/admin/Add.vue'),
-                meta: {
-                    requiresAuth: true
-                }
-            },
+            }
+        ]
+    },
+    {
+        path: '/admin',
+        name: 'admin',
+        component: () => import('../views/admin/Index.vue'),
+        children: [
             {
                 path: '/manage',
-                component: () => import('../views/kids/admin/Manage.vue'),
+                component: () => import('../views/admin/Manage/Manage.vue'),
                 meta: {
                     requiresAuth: true
                 }
@@ -38,6 +37,9 @@ const routes = [
     },
     {
         path: '/:pathMatch(.*)*', redirect: '/'
+    },
+    {
+        path: '/admin/:pathMatch(.*)*', redirect: '/manage'
     },
 ]
 

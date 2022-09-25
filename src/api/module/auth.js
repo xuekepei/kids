@@ -22,5 +22,8 @@ export default function (api) {
         add(letter, data) {
             return api.post(kidsBaseUrl + '/letters/' + letter + '/words', data, { needToken: true })
         },
+        update(letter, data) {
+            return api.patch(kidsBaseUrl + '/letters/' + letter + '/words', data, { needToken: true})
+        }
     }
 }

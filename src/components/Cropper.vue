@@ -1,6 +1,6 @@
 <template>
     <div>
-        <NUpload :default-upload="false" :show-file-list="false" accept="image/*" ref="uploder" @change="uploadImage">
+        <NUpload :default-upload="false" :show-file-list="false" accept="image/*" ref="uploader" @change="uploadImage">
             <NButton icon="pi pi-check">图片选择</NButton>
         </NUpload>
 
@@ -47,7 +47,7 @@ export default {
         const cropperDialogOpen = ref(false)
         const cropper = ref(null)
         const imgSrc = ref('')
-        const uploder = ref(null)
+        const uploader = ref(null)
         const uploadImage = (event) => {
 
             const file = event.file.file
@@ -71,7 +71,12 @@ export default {
             cropperDialogOpen.value = false
         }
         return {
-            cropper, cropperDialogOpen, imgSrc, uploadImage, toCrop, uploder,
+            cropper,
+            cropperDialogOpen,
+            imgSrc,
+            uploadImage,
+            toCrop,
+            uploader,
             bodyStyle: {
                 maxWidth: '600px'
             },

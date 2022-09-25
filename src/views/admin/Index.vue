@@ -1,6 +1,10 @@
 <template>
     <div class="kids-body-box">
-        <div class="kids-body" :class="{collapsed:showMenu && isMobile}">
+        <div class="kids-body" :class="{ collapsed:showMenu }">
+            <div class="side-bar-menu">
+                <sidebar-menu :collapsed="!showMenu" theme="white-theme" :width="'150px'" :widthCollapsed="'0px'"
+                              :menu="menuData" :hideToggle="true" @item-click="onSideBarItemClick"/>
+            </div>
             <div class="menu-bar">
                 <n-space justify="space-between">
                     <n-button @click="onClickMenu">
@@ -14,11 +18,6 @@
             </div>
             <router-view/>
         </div>
-        <div class="side-bar-menu">
-            <sidebar-menu :collapsed="!showMenu" theme="white-theme" :width="'150px'" :widthCollapsed="'0px'"
-                          :menu="menuData" :hideToggle="true" @item-click="onSideBarItemClick"/>
-        </div>
-
     </div>
 </template>
 <script>
@@ -41,7 +40,7 @@ export default {
 
         const route = useRoute()
         const router = useRouter()
-        const showMenu = ref(false)
+        const showMenu = ref(true)
         onMounted(async () => {
             await router.isReady()
             if (route.path === '/') {
@@ -50,19 +49,11 @@ export default {
                 })
             }
         })
-        const isMobile = computed(() => {
-            return navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)
-
-        })
         const menuData = computed(() => {
             const newMenuData = []
             newMenuData.push({
-                href: '/test',
-                title: 'Test'
-            })
-            newMenuData.push({
-                href: '/learn',
-                title: 'Learn'
+                href: '/manage',
+                title: 'Manage'
             })
             return newMenuData
         })
@@ -79,7 +70,6 @@ export default {
         return {
             menuData,
             showMenu,
-            isMobile,
             onClickMenu,
             onSideBarItemClick
         }
@@ -92,14 +82,14 @@ export default {
 }
 
 .kids-body {
-    margin: auto;
-    max-width: 500px;
+    margin-left: 0;
     padding: 0 5px;
     transition: margin-left 0.3s;
 }
 
 .kids-body.collapsed {
     margin-left: 150px;
+    /*transition: margin-left 0.25s;*/
 }
 
 .menu-bar {
