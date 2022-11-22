@@ -1,10 +1,10 @@
 <template>
-    <n-form class="login-form-body" ref="formRef" :model="formValue" :rules="rules">
+    <n-form class="login-form-body" ref="formRef" :model="form" :rules="rules">
         <n-form-item>
-            <n-input v-model:value="formValue.username" placeholder="用户名"/>
+            <n-input v-model:value="form.username" placeholder="用户名"/>
         </n-form-item>
         <n-form-item>
-            <n-input v-model:value="formValue.password" type="password" placeholder="密码"/>
+            <n-input v-model:value="form.password" type="password" placeholder="密码"/>
         </n-form-item>
 
         <div style="display: flex; justify-content: center; margin-top: 20px">
@@ -16,7 +16,7 @@
 
 <script>
 import { ref } from 'vue'
-import { NForm, NFormItem, NInput, NRow, useMessage } from 'naive-ui'
+import { NForm, NFormItem, NInput, useMessage } from 'naive-ui'
 import { authApi } from '@/api'
 import router from '../../../router'
 import store from '@/store'
@@ -26,13 +26,12 @@ export default {
         NForm,
         NFormItem,
         NInput,
-        NRow,
     },
     // eslint-disable-next-line vue/multi-word-component-names
     name: 'Login',
     setup() {
         const formRef = ref(null)
-        const formValue = ref({
+        const form = ref({
             username: '',
             password: '',
         })
@@ -40,16 +39,16 @@ export default {
         window.$message = message
         const login = (e) => {
             e.preventDefault()
-            if (!formValue.value.username) {
+            if (!form.value.username) {
                 message.error('请输入用户名')
                 return
             }
-            if (!formValue.value.password) {
+            if (!form.value.password) {
                 message.error('请输入密码')
                 return
             }
 
-            authApi.login(formValue.value).then(res => {
+            authApi.login(form.value).then(res => {
                 const jwt = res.data.token
                 store.dispatch('setToken', jwt)
 
@@ -59,7 +58,7 @@ export default {
         }
         return {
             formRef,
-            formValue,
+            form,
             rules: {
                 username: {
                     required: true, message: '请输入用户名', trigger: 'blur'
