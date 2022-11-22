@@ -1,20 +1,22 @@
 <template>
     <n-form class="login-form-body" ref="formRef" :model="formValue" :rules="rules">
         <n-form-item>
-            <n-input v-model:value="formValue.username" placeholder="用户名" />
+            <n-input v-model:value="formValue.username" placeholder="用户名"/>
         </n-form-item>
         <n-form-item>
-            <n-input v-model:value="formValue.password" type="password" placeholder="密码" />
+            <n-input v-model:value="formValue.password" type="password" placeholder="密码"/>
         </n-form-item>
-        <n-form-item>
+
+        <div style="display: flex; justify-content: center; margin-top: 20px">
             <n-button attr-type="button" type="primary" @click="login">登录</n-button>
-        </n-form-item>
+        </div>
+
     </n-form>
 </template>
 
 <script>
 import { ref } from 'vue'
-import { NForm, NFormItem, NInput, useMessage } from 'naive-ui'
+import { NForm, NFormItem, NInput, NRow, useMessage } from 'naive-ui'
 import { authApi } from '@/api'
 import router from '../../../router'
 import store from '@/store'
@@ -24,8 +26,9 @@ export default {
         NForm,
         NFormItem,
         NInput,
+        NRow,
     },
-  // eslint-disable-next-line vue/multi-word-component-names
+    // eslint-disable-next-line vue/multi-word-component-names
     name: 'Login',
     setup() {
         const formRef = ref(null)
@@ -36,7 +39,7 @@ export default {
         const message = useMessage()
         window.$message = message
         const login = (e) => {
-           e.preventDefault()
+            e.preventDefault()
             if (!formValue.value.username) {
                 message.error('请输入用户名')
                 return
@@ -51,13 +54,8 @@ export default {
                 store.dispatch('setToken', jwt)
 
                 message.success('登录成功')
-                router.replace({
-                    path: '/add',
-                })
+                router.replace('Admin')
             })
-
-
-
         }
         return {
             formRef,
@@ -83,7 +81,7 @@ export default {
     flex-direction: column;
     max-width: 500px;
     min-height: 100%;
-    padding: 0px 5px;
+    padding: 0 5px;
     justify-content: center;
     justify-items: center;
 }
