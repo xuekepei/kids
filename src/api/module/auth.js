@@ -1,6 +1,6 @@
-const kidsBaseUrl = process.env.VUE_APP_API_BASE_URL +'/kids'
-const dicBaseUrl = process.env.VUE_APP_API_BASE_URL +'/dic'
-const authBaseUrl = process.env.VUE_APP_API_BASE_URL+'/account'
+const kidsBaseUrl = process.env.VUE_APP_API_BASE_URL + '/kids'
+const dicBaseUrl = process.env.VUE_APP_API_BASE_URL + '/dic'
+const authBaseUrl = process.env.VUE_APP_API_BASE_URL + '/account'
 
 export default function (api) {
     return {
@@ -23,7 +23,10 @@ export default function (api) {
             return api.post(kidsBaseUrl + '/letters/' + letter + '/words', data, { needToken: true })
         },
         update(letter, data) {
-            return api.patch(kidsBaseUrl + '/letters/' + letter + '/words', data, { needToken: true})
-        }
+            return api.patch(kidsBaseUrl + '/letters/' + letter + '/words', data, { needToken: true })
+        },
+        sentences() {
+            return api.get(kidsBaseUrl + '/sentences')
+        },
     }
 }

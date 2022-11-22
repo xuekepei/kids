@@ -23,8 +23,15 @@ const routes = [
         component: () => import('../views/admin/Index.vue'),
         children: [
             {
-                path: '/manage',
-                component: () => import('../views/admin/Manage/Manage.vue'),
+                path: '/word',
+                component: () => import('../views/admin/Word/WordList.vue'),
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/sentence',
+                component: () => import('../views/admin/Sentence/SentenceList.vue'),
                 meta: {
                     requiresAuth: true
                 }
@@ -39,7 +46,7 @@ const routes = [
         path: '/:pathMatch(.*)*', redirect: '/'
     },
     {
-        path: '/admin/:pathMatch(.*)*', redirect: '/manage'
+        path: '/admin/:pathMatch(.*)*', redirect: '/word'
     },
 ]
 

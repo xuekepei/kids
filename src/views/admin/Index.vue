@@ -51,10 +51,16 @@ export default {
         })
         const menuData = computed(() => {
             const newMenuData = []
-            newMenuData.push({
-                href: '/manage',
-                title: 'Manage'
-            })
+            newMenuData.push(
+                {
+                    href: '/word',
+                    title: 'Word'
+                },
+                {
+                    href: '/sentence',
+                    title: 'Sentence'
+                }
+            )
             return newMenuData
         })
 
