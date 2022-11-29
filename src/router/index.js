@@ -9,28 +9,37 @@ const routes = [
         children: [
             {
                 path: '/learn',
+                name: 'Learn',
                 component: () => import('../views/kids/learn/Word/Learn.vue')
             },
             {
                 path: '/test',
+                name: 'Test',
                 component: () => import('../views/kids/learn/Word/WordDetail.vue')
+            },
+            {
+                path: '/sentence',
+                name: 'Sentence',
+                component: () => import('../views/kids/learn/Sentence/Sentence.vue')
             }
         ]
     },
     {
         path: '/admin',
-        name: 'admin',
+        name: 'Admin',
         component: () => import('../views/admin/Index.vue'),
         children: [
             {
-                path: '/word',
+                path: '/admin/word',
+                name: 'AdminWord',
                 component: () => import('../views/admin/Word/WordList.vue'),
                 meta: {
                     requiresAuth: true
                 }
             },
             {
-                path: '/sentence',
+                path: '/admin/sentence',
+                name: 'AdminSentence',
                 component: () => import('../views/admin/Sentence/SentenceList.vue'),
                 meta: {
                     requiresAuth: true
@@ -40,7 +49,7 @@ const routes = [
     },
     {
         path: '/login',
-        component: () => import('../views/kids/User/Login.vue')
+        component: () => import('../views/Login.vue')
     },
     {
         path: '/:pathMatch(.*)*', redirect: '/'

@@ -45,7 +45,7 @@ export default {
             await router.isReady()
             if (route.path === '/') {
                 await router.replace({
-                    path: '/learn',
+                    name: 'AdminWord',
                 })
             }
         })
@@ -53,11 +53,11 @@ export default {
             const newMenuData = []
             newMenuData.push(
                 {
-                    href: '/word',
+                    href: '/admin/word',
                     title: 'Word'
                 },
                 {
-                    href: '/sentence',
+                    href: '/admin/sentence',
                     title: 'Sentence'
                 }
             )

@@ -64,6 +64,10 @@ export default {
                 href: '/learn',
                 title: 'Learn'
             })
+            newMenuData.push({
+                href: '/sentence',
+                title: 'Sentence'
+            })
             return newMenuData
         })
 

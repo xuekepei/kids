@@ -18,7 +18,7 @@
 import { ref } from 'vue'
 import { NForm, NFormItem, NInput, useMessage } from 'naive-ui'
 import { authApi } from '@/api'
-import router from '../../../router'
+import router from '../router'
 import store from '@/store'
 
 export default {
@@ -53,7 +53,7 @@ export default {
                 store.dispatch('setToken', jwt)
 
                 message.success('登录成功')
-                router.replace('Admin')
+                router.replace({ name: 'Admin' })
             })
         }
         return {
