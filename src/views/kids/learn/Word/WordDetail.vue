@@ -52,7 +52,7 @@ export default {
             loading.value = true
             authApi.allWords().then((res) => {
                 loading.value = false
-                if (res.status == 200) {
+                if (res.status === 200) {
                     // console.log(res.data)
                     wordList = res.data
                     wordIndex = Math.floor(Math.random() * (wordList.length - 1)) + 1
@@ -66,13 +66,11 @@ export default {
             return Math.random() > 0.5 ? -1 : 1
         }
         const clickWord = (item) => {
-            if (word.value.id != item.id) {
+            if (word.value.id !== item.id) {
                 item.status = 1
                 playAudio('https://objectstorage.ap-tokyo-1.oraclecloud.com/n/nrdsxugarz32/b/bucket-20211103-1156/o/kids%2Fmp3%2Ferror.mp3').then(() => {
                     item.status = 0
-                    word.value.values.sort(randomSort)
                 }).catch(() => {
-                    word.value.values.sort(randomSort)
                     item.status = 0
                 })
                 return
@@ -102,7 +100,7 @@ export default {
                 while (newWord.values.length < 4) {
                     let index = Math.floor(Math.random() * (wordList.length - 1)) + 1
                     let valueWord = wordList[index]
-                    if (valueWord.id != newWord.id && !newWord.values.some(e => e.id === valueWord.id)) {
+                    if (valueWord.id !== newWord.id && !newWord.values.some(e => e.id === valueWord.id)) {
                         valueWord.status = 0
                         newWord.values.push(valueWord)
                     }
@@ -116,7 +114,7 @@ export default {
         }
         const playAudio = (url) => {
             return new Promise((resolve, reject) => {
-                if (!url || url == '') {
+                if (!url || url === '') {
                     reject()
                     return
                 }
