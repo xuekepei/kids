@@ -6,31 +6,21 @@
         <n-space vertical align="end">
             <n-button @click="newWord">新增</n-button>
         </n-space>
-        <n-list>
-            <n-list-item v-for="(item, index) in itemList" v-bind:key="index">
-                <n-space justify="space-between">
-                    <n-image width="100" :src="item.image_url" preview-disabled @click="playAudio(item.audio_url)"/>
-                    <n-space vertical class="learn-word-title" align="start">
-                        <h3>{{ item.word }}</h3>
-                        <h4>{{ item.hiragana }}</h4>
-                    </n-space>
-                    <n-space vertical align="end">
-                        <n-button type="tertiary" @click="editWord(item)">
-                            编辑
-                        </n-button>
-                    </n-space>
-                </n-space>
-            </n-list-item>
-        </n-list>
+        <n-data-table
+            :columns="columns"
+            :data="itemList"
+            :pagination="true"
+            :bordered="false"
+        ></n-data-table>
     </div>
 
     <WordSearch ref="wordSearchRef"></WordSearch>
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
-import { NSpin, NList, NListItem, NImage } from 'naive-ui'
-import { authApi } from '@/api'
+import {onMounted, ref} from 'vue'
+import {NDataTable, NImage, NList, NListItem, NSpin} from 'naive-ui'
+import {authApi} from '@/api'
 import WordSearch from '@/components/WordSearch'
 
 export default {
@@ -44,7 +34,8 @@ export default {
         NList,
         NListItem,
         NImage,
-        WordSearch
+        WordSearch,
+        NDataTable
     },
     setup() {
         let audioPlay = new Audio()
@@ -54,6 +45,17 @@ export default {
         let autoPlayTimer = null
         let autoPlayNum = ref(3)
         const wordSearchRef = ref()
+        const columns = ref([{
+                title: 'No',
+                key: 'id'
+            }, {
+                title: '图片',
+                key: 'image_url'
+            }, {
+                title: 'Word',
+                key: 'word'
+            }]
+        )
         onMounted(() => {
             loading.value = true
             authApi.allWords().then((res) => {
@@ -93,6 +95,7 @@ export default {
         const editWord = (item) => {
             wordSearchRef.value.show(item)
         }
+
         return {
             itemList,
             playAudio,
@@ -103,6 +106,7 @@ export default {
             newWord,
             editWord,
             wordSearchRef,
+            columns
         }
     }
 }
