@@ -20,7 +20,8 @@
     "vue-cropperjs": "^5.0.0",
     "vue-router": "^4.0.15",
     "vue-sidebar-menu": "^5.2.3",
-    "vuex": "^4.0.2"
+    "vuex": "^4.0.2",
+    "element-plus": "^2.4.1"
   },
   "devDependencies": {
     "eslint": "^8.11.0",
