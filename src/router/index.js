@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 import store from '../store'
 
 const routes = [
@@ -48,6 +48,21 @@ const routes = [
         ]
     },
     {
+        path: '/records',
+        name: 'RecordHome',
+        component: () => import('../views/records/Index.vue'),
+        children: [
+            {
+                path: '/record',
+                name: 'Record',
+                component: () => import('../views/records/Record.vue'),
+                meta: {
+                    requiresAuth: true
+                }
+            }
+        ]
+    },
+    {
         path: '/login',
         component: () => import('../views/Login.vue')
     },
@@ -68,7 +83,7 @@ router.beforeEach((to, from, next) => {
     const token = store.state.token
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
     if (requiresAuth && !token) {
-        next({ path: '/login' })
+        next({path: '/login'})
     } else {
         next()
     }
