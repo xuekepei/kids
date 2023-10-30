@@ -31,6 +31,9 @@ export default function (api) {
         },
         workRecord(data) {
             return api.post(recordBaseUrl + '/records', data, {needToken: true})
+        },
+        getRecordList(data) {
+            return api.get(recordBaseUrl + '/records', { params: data, needToken: true})
         }
     }
 }

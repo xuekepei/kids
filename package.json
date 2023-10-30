@@ -21,7 +21,8 @@
     "vue-router": "^4.0.15",
     "vue-sidebar-menu": "^5.2.3",
     "vuex": "^4.0.2",
-    "element-plus": "^2.4.1"
+    "element-plus": "^2.4.1",
+    "moment": "^2.29.1"
   },
   "devDependencies": {
     "eslint": "^8.11.0",
